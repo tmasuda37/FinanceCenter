@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: FinanceCenter
+Implementation-Version: 1.0
+Built-By: Toshi
+Implementation-Vendor-Id: com.tmasuda.fc
+Build-Jdk: 1.8.0_60
+Implementation-URL: http://projects.spring.io/spring-boot/tmasuda-fina
+ nce-center/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
