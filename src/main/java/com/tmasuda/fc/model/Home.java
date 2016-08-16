@@ -7,15 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Currency {
+public class Home {
 	@Id
 	@Column(name = "public_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long publicID;
-
-	@Column
-	private String name;
-
-	@Column
-	private String symbol;
+	public Long publicID;
 }
