@@ -12,11 +12,11 @@ public class Event {
 	@Id
 	@Column(name = "public_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long publicID;
+	public Long publicID;
 
 	@ManyToOne
-	private Account accountID;
+	public Home home;
 
 	@Column
-	private String name;
+	public String name;
 }
