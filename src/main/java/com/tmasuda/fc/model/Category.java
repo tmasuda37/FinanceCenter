@@ -17,27 +17,33 @@ public class Category {
 	public Long publicID;
 
 	@ManyToOne
-	public Home home;
+	public HouseHold household;
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	public CategoryApplyTo cateogoryApplyTo;
+	public CategoryApplyTo categoryApplyTo;
 
 	@Column
 	public String name;
 
 	@Column
-	public boolean expense;
+	public boolean toExpense;
+
+	@Column
+	public boolean toTaxReturn;
+
+	@Column
+	public boolean toReimburse;
 
 	public Category() {
 	}
 
-	public Category(Home home, String name, CategoryApplyTo cateogoryApplyTo, boolean expense) {
+	public Category(HouseHold household, CategoryApplyTo categoryApplyTo, String name, boolean toExpense) {
 		super();
-		this.home = home;
+		this.household = household;
+		this.categoryApplyTo = categoryApplyTo;
 		this.name = name;
-		this.cateogoryApplyTo = cateogoryApplyTo;
-		this.expense = expense;
+		this.toExpense = toExpense;
 	}
 
 }

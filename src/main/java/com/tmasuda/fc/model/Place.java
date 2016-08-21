@@ -15,7 +15,7 @@ public class Place {
 	public Long publicID;
 
 	@ManyToOne
-	public Home home;
+	public HouseHold household;
 
 	@Column
 	public String name;

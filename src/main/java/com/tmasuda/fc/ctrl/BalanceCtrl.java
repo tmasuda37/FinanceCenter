@@ -26,7 +26,7 @@ public class BalanceCtrl {
 	private BigDecimal calcBalance(Balance aBalance, Transaction aTransaction) {
 		BigDecimal result;
 
-		if (aTransaction.category.expense) {
+		if (aTransaction.category.toExpense) {
 			result = aBalance.amount.subtract(aTransaction.amount);
 		} else {
 			result = aBalance.amount.add(aTransaction.amount);
@@ -51,7 +51,7 @@ public class BalanceCtrl {
 	}
 
 	private BalanceKey getBalanceKey(Transaction aTransaction) {
-		CategoryApplyTo cateogoryApplyTo = aTransaction.category.cateogoryApplyTo;
+		CategoryApplyTo cateogoryApplyTo = aTransaction.category.categoryApplyTo;
 		return new BalanceKey(aTransaction.account, cateogoryApplyTo, aTransaction.currency);
 	}
 
