@@ -12,9 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.tmasuda.fc.model.Account;
-import com.tmasuda.fc.model.Home;
+import com.tmasuda.fc.model.HouseHold;
 import com.tmasuda.fc.repo.AccountRepo;
-import com.tmasuda.fc.repo.HomeRepo;
+import com.tmasuda.fc.repo.HouseHoldRepo;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -24,7 +24,7 @@ public class AccountCtrlTest {
 	private AccountRepo accountRepo;
 
 	@Autowired
-	private HomeRepo homeRepo;
+	private HouseHoldRepo houseHoldRepo;
 
 	@Autowired
 	private AccountCtrl accountCtrl;
@@ -41,8 +41,8 @@ public class AccountCtrlTest {
 	public void createNewHomeByCreatingAccount() {
 		accountCtrl.createNewAccount("facebook id");
 
-		List<Home> homes = homeRepo.findAll();
-		assertEquals(1, homes.size());
+		List<HouseHold> houseHolds = houseHoldRepo.findAll();
+		assertEquals(1, houseHolds.size());
 	}
 
 }

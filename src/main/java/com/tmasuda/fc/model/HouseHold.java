@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Home {
+public class HouseHold {
 	@Id
 	@Column(name = "public_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)

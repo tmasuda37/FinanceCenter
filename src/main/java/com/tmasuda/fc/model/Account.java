@@ -22,7 +22,7 @@ public class Account {
 	public String snsID;
 
 	@ManyToOne
-	public Home home;
+	public HouseHold household;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
 	public List<Transaction> listTransactions;

@@ -44,7 +44,7 @@ public class TransactionCtrlTest {
 	@Test
 	public void createNewExpenseTransaction() {
 		Account anAccount = accountCtrl.createNewAccount("facebook id");
-		Category exCat = categoryCtrl.createNewCategory("Food", anAccount.home, CategoryApplyTo.Wallet, true);
+		Category exCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Food", true);
 
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), exCat));
 
@@ -56,7 +56,7 @@ public class TransactionCtrlTest {
 	@Test
 	public void createNewIncomeTransaction() {
 		Account anAccount = accountCtrl.createNewAccount("facebook id");
-		Category inCat = categoryCtrl.createNewCategory("Food", anAccount.home, CategoryApplyTo.Wallet, false);
+		Category inCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Food", false);
 
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), inCat));
 
@@ -68,7 +68,7 @@ public class TransactionCtrlTest {
 	@Test
 	public void createNewExpenseTransactions() {
 		Account anAccount = accountCtrl.createNewAccount("facebook id");
-		Category exCat = categoryCtrl.createNewCategory("Food", anAccount.home, CategoryApplyTo.Wallet, true);
+		Category exCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Food", true);
 
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), exCat));
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), exCat));
@@ -81,7 +81,7 @@ public class TransactionCtrlTest {
 	@Test
 	public void createNewIncomeTransactions() {
 		Account anAccount = accountCtrl.createNewAccount("facebook id");
-		Category inCat = categoryCtrl.createNewCategory("Salary", anAccount.home, CategoryApplyTo.Wallet, false);
+		Category inCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Salary", false);
 
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), inCat));
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), inCat));
@@ -94,8 +94,8 @@ public class TransactionCtrlTest {
 	@Test
 	public void createNewMixTransactions() {
 		Account anAccount = accountCtrl.createNewAccount("facebook id");
-		Category exCat = categoryCtrl.createNewCategory("Food", anAccount.home, CategoryApplyTo.Wallet, true);
-		Category inCat = categoryCtrl.createNewCategory("Salary", anAccount.home, CategoryApplyTo.Wallet, false);
+		Category exCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Food", true);
+		Category inCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Salary", false);
 
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), exCat));
 		transactionCtrl.createNewTransaction(createTransactionObj(anAccount, new BigDecimal(10.00), inCat));
@@ -108,8 +108,8 @@ public class TransactionCtrlTest {
 	@Test
 	public void createNewMixCurrencyTransactions() {
 		Account anAccount = accountCtrl.createNewAccount("facebook id");
-		Category exCat = categoryCtrl.createNewCategory("Food", anAccount.home, CategoryApplyTo.Wallet, true);
-		Category inCat = categoryCtrl.createNewCategory("Salary", anAccount.home, CategoryApplyTo.Wallet, false);
+		Category exCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Food", true);
+		Category inCat = categoryCtrl.createNewCategory(anAccount.household, CategoryApplyTo.Wallet, "Salary", false);
 
 		transactionCtrl.createNewTransaction(
 				createTransactionObj(anAccount, new BigDecimal(100.00), exCat, Currency.getInstance("JPY")));
