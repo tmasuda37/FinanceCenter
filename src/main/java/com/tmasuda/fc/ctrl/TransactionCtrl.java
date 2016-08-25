@@ -7,17 +7,31 @@ import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.repo.TransactionRepo;
 
 @Controller
-public class TransactionCtrl {
+public class TransactionCtrl extends AbstractCtrl<Transaction> {
 
 	@Autowired
 	private TransactionRepo transactionRepo;
 
 	@Autowired
-	private BalanceCtrl balanceCtrl;
+	private AccountBalanceCtrl accountBalanceCtrl;
 
-	public void createNewTransaction(Transaction aTransaction) {
-		transactionRepo.save(aTransaction);
-		balanceCtrl.updateBalance(aTransaction);
+	@Override
+	public Transaction getSavedModel(Transaction instantiated) {
+		return null;
+	}
+
+	@Override
+	public Transaction createNewModel(Transaction instantiated) {
+		return transactionRepo.save(instantiated);
+	}
+
+	@Override
+	public void preRun(Transaction instantiated) {
+	}
+
+	@Override
+	public void postRun(Transaction committed) {
+		accountBalanceCtrl.updateBalance(committed);
 	}
 
 }

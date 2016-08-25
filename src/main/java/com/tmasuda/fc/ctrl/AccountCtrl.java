@@ -1,35 +1,44 @@
 package com.tmasuda.fc.ctrl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 
 import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.HouseHold;
 import com.tmasuda.fc.repo.AccountRepo;
-import com.tmasuda.fc.repo.HouseHoldRepo;
 
 @Controller
-public class AccountCtrl {
+public class AccountCtrl extends AbstractCtrl<Account> {
 
 	@Autowired
-	private HouseHoldRepo houseHoldRepo;
+	private HouseHoldCtrl houseHoldCtrl;
 
 	@Autowired
 	private AccountRepo accountRepo;
 
-	public Account createNewAccount(String snsID) {
-		HouseHold houseHold = createNewHome();
-
-		Account anAccount = new Account();
-		anAccount.snsID = snsID;
-		anAccount.household = houseHold;
-
-		return accountRepo.save(anAccount);
+	@Override
+	public Account getSavedModel(Account instantiated) {
+		Example<Account> example = Example.of(instantiated);
+		return accountRepo.findOne(example);
 	}
 
-	private HouseHold createNewHome() {
-		HouseHold houseHold = new HouseHold();
-		return houseHoldRepo.save(houseHold);
+	@Override
+	public Account createNewModel(Account instantiated) {
+		return accountRepo.save(instantiated);
+	}
+
+	private HouseHold getInstance(String houseHoldId) {
+		return new HouseHold(houseHoldId);
+	}
+
+	@Override
+	public void preRun(Account instantiated) {
+		instantiated.houseHold = houseHoldCtrl.getOrCreateModel(getInstance(instantiated.houseHoldId));
+	}
+
+	@Override
+	public void postRun(Account committed) {
 	}
 
 }

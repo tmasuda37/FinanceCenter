@@ -1,15 +1,28 @@
 package com.tmasuda.fc.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class HouseHold {
+
 	@Id
-	@Column(name = "public_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long publicID;
+	@Column
+	public String houseHoldId;
+
+	@OneToMany(mappedBy = "houseHold")
+	public Set<Account> accounts = new HashSet<Account>();
+
+	public HouseHold() {
+	}
+
+	public HouseHold(String houseHoldId) {
+		this.houseHoldId = houseHoldId;
+	}
+
 }
