@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.tmasuda.fc.model.HouseHold;
 
-public interface HouseHoldRepo extends JpaRepository<HouseHold, Long> {
+public interface HouseHoldRepo extends JpaRepository<HouseHold, String> {
 }

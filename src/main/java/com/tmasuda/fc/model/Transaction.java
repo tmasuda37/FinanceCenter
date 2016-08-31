@@ -1,8 +1,8 @@
 package com.tmasuda.fc.model;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Currency;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,17 +14,18 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Transaction {
+
 	@Id
 	@Column(name = "public_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long publicID;
+	public Long publicId;
 
 	@ManyToOne
 	@JoinColumn(name = "account_id")
 	public Account account;
 
 	@Column
-	public Date date;
+	public Calendar calendar;
 
 	@Column
 	public BigDecimal amount;
@@ -32,8 +33,7 @@ public class Transaction {
 	@Column
 	public Currency currency;
 
-	@ManyToOne
-	@JoinColumn(nullable = false)
+	@ManyToOne(optional = false)
 	public Category category;
 
 	@ManyToOne
@@ -44,4 +44,5 @@ public class Transaction {
 
 	@Column
 	public String description;
+
 }
