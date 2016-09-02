@@ -55,6 +55,10 @@ public class Category {
 		this(houseHold, DEFAULT_CATEGORY_APPLY_TO, name, DEFAULT_TO_EXPENSE, DEFAULT_TO_TAX_RETURN, DEFAULT_TO_REIMBURSE);
 	}
 
+	public Category(HouseHold houseHold, String name, boolean toExpense) {
+		this(houseHold, DEFAULT_CATEGORY_APPLY_TO, name, toExpense, DEFAULT_TO_TAX_RETURN, DEFAULT_TO_REIMBURSE);
+	}
+
 	public Category(HouseHold houseHold, CategoryApplyTo categoryApplyTo, String name, boolean toExpense, boolean toTaxReturn, boolean toReimburse) {
 		this.houseHold = houseHold;
 		this.categoryApplyTo = categoryApplyTo;
