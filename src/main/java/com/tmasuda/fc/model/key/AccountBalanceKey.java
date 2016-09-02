@@ -13,7 +13,7 @@ import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.CategoryApplyTo;
 
 @Embeddable
-public class BaseAccountBalanceKey implements Serializable {
+public class AccountBalanceKey implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,10 +27,10 @@ public class BaseAccountBalanceKey implements Serializable {
 	@Enumerated(EnumType.STRING)
 	public CategoryApplyTo cateogoryApplyTo;
 
-	public BaseAccountBalanceKey() {
+	public AccountBalanceKey() {
 	}
 
-	public BaseAccountBalanceKey(Account account, Currency currency, CategoryApplyTo cateogoryApplyTo) {
+	public AccountBalanceKey(Account account, Currency currency, CategoryApplyTo cateogoryApplyTo) {
 		this.account = account;
 		this.currency = currency;
 		this.cateogoryApplyTo = cateogoryApplyTo;

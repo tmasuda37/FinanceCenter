@@ -7,18 +7,21 @@ import org.springframework.stereotype.Controller;
 
 import com.tmasuda.fc.model.AccountBalance;
 import com.tmasuda.fc.model.Transaction;
-import com.tmasuda.fc.model.key.BaseAccountBalanceKey;
+import com.tmasuda.fc.model.key.AccountBalanceKey;
 import com.tmasuda.fc.repo.AccountBalanceRepo;
 
 @Controller
 public class AccountBalanceCtrl extends AbstractCtrl<AccountBalance> {
 
 	@Autowired
+	private MonthlyCategoryBalanceCtrl categoryBalanceCtrl;
+
+	@Autowired
 	private AccountBalanceRepo accountBalanceRepo;
 
 	@Override
 	public AccountBalance getSavedModel(AccountBalance instantiated) {
-		return accountBalanceRepo.findOne(instantiated.baseAccountBalanceKey);
+		return accountBalanceRepo.findOne(instantiated.anAccountBalanceKey);
 	}
 
 	@Override
@@ -36,13 +39,15 @@ public class AccountBalanceCtrl extends AbstractCtrl<AccountBalance> {
 
 	public AccountBalance getBalance(Transaction aTransaction) {
 		AccountBalance instantiated = getBalance(getBalanceKey(aTransaction));
-		return accountBalanceRepo.findOne(instantiated.baseAccountBalanceKey);
+		return accountBalanceRepo.findOne(instantiated.anAccountBalanceKey);
 	}
 
 	public void updateBalance(Transaction aTransaction) {
 		AccountBalance instantiated = getBalance(getBalanceKey(aTransaction));
 		instantiated.amount = calcBalance(instantiated, aTransaction);
 		accountBalanceRepo.save(instantiated);
+
+		categoryBalanceCtrl.updateBalance(aTransaction);
 	}
 
 	protected BigDecimal calcBalance(AccountBalance aBalance, Transaction aTransaction) {
@@ -57,12 +62,12 @@ public class AccountBalanceCtrl extends AbstractCtrl<AccountBalance> {
 		return result;
 	}
 
-	private AccountBalance getBalance(BaseAccountBalanceKey baseAccountBalanceKey) {
-		return getOrCreateModel(new AccountBalance(baseAccountBalanceKey));
+	private AccountBalance getBalance(AccountBalanceKey anAccountBalanceKey) {
+		return getOrCreateModel(new AccountBalance(anAccountBalanceKey));
 	}
 
-	private BaseAccountBalanceKey getBalanceKey(Transaction aTransaction) {
-		return new BaseAccountBalanceKey(aTransaction.account, aTransaction.currency, aTransaction.category.categoryApplyTo);
+	private AccountBalanceKey getBalanceKey(Transaction aTransaction) {
+		return new AccountBalanceKey(aTransaction.account, aTransaction.currency, aTransaction.category.categoryApplyTo);
 	}
 
 }

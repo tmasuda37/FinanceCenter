@@ -19,7 +19,13 @@ public class SenarioProvider {
 
 	public static final Currency CURRENCY_JPY = Currency.getInstance("JPY");
 
-	private static final String CATEGORY_FOOD = "Food";
+	public static final Currency CURRENCY_USD = Currency.getInstance("USD");
+
+	public static final String CATEGORY_FOOD = "Food";
+
+	public static final String CATEGORY_MEDICAL = "Medical";
+
+	public static final String CATEGORY_INCOME = "Income";
 
 	public Account anAccount;
 
@@ -40,12 +46,40 @@ public class SenarioProvider {
 		return accountCtrl.getOrCreateModel(new Account(houseHoldId, snsId));
 	}
 
-	public Transaction expenseForFoodInJPY(String methodName, BigDecimal amount) {
-		return createTransactionObj(methodName, amount, CATEGORY_FOOD, CURRENCY_JPY);
+	public Transaction incomesForIncomeInEUR(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_INCOME, CURRENCY_EUR);
+	}
+
+	public Transaction incomesForIncomeInJPY(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_INCOME, CURRENCY_JPY);
+	}
+
+	public Transaction incomesForIncomeInUSD(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_INCOME, CURRENCY_USD);
 	}
 
 	public Transaction expenseForFoodInEUR(String methodName, BigDecimal amount) {
 		return createTransactionObj(methodName, amount, CATEGORY_FOOD, CURRENCY_EUR);
+	}
+
+	public Transaction expenseForFoodInJPY(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_FOOD, CURRENCY_JPY);
+	}
+
+	public Transaction expenseForFoodInUSD(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_FOOD, CURRENCY_USD);
+	}
+
+	public Transaction expenseForMedicalInEUR(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_MEDICAL, CURRENCY_EUR);
+	}
+
+	public Transaction expenseForMedicalInJPY(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_MEDICAL, CURRENCY_JPY);
+	}
+
+	public Transaction expenseForMedicalInUSD(String methodName, BigDecimal amount) {
+		return createTransactionObj(methodName, amount, CATEGORY_MEDICAL, CURRENCY_USD);
 	}
 
 	private Transaction createTransactionObj(String methodName, BigDecimal amount, String categoryName, Currency currency) {
@@ -54,7 +88,11 @@ public class SenarioProvider {
 		Transaction aTransaction = new Transaction();
 		aTransaction.account = anAccount;
 		aTransaction.amount = amount;
-		aTransaction.category = categoryCtrl.getOrCreateModel(new Category(aTransaction.account.houseHold, categoryName));
+		if (categoryName == CATEGORY_FOOD || categoryName == CATEGORY_MEDICAL) {
+			aTransaction.category = categoryCtrl.getOrCreateModel(new Category(aTransaction.account.houseHold, categoryName, true));
+		} else if (categoryName == CATEGORY_INCOME) {
+			aTransaction.category = categoryCtrl.getOrCreateModel(new Category(aTransaction.account.houseHold, categoryName, false));
+		}
 		aTransaction.currency = currency;
 		aTransaction.calendar = Calendar.getInstance();
 		aTransaction.description = methodName;

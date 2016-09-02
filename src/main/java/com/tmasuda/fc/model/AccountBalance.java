@@ -1,25 +1,28 @@
 package com.tmasuda.fc.model;
 
+import java.math.BigDecimal;
+
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
-import com.tmasuda.fc.model.key.BaseAccountBalanceKey;
+import com.tmasuda.fc.model.key.AccountBalanceKey;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class AccountBalance extends BaseAccountBalance {
+public class AccountBalance {
 
 	@EmbeddedId
-	public BaseAccountBalanceKey baseAccountBalanceKey;
+	public AccountBalanceKey anAccountBalanceKey;
+
+	@Column
+	public BigDecimal amount = BigDecimal.ZERO;
 
 	public AccountBalance() {
 		super();
 	}
 
-	public AccountBalance(BaseAccountBalanceKey baseAccountBalanceKey) {
+	public AccountBalance(AccountBalanceKey anAccountBalanceKey) {
 		super();
-		this.baseAccountBalanceKey = baseAccountBalanceKey;
+		this.anAccountBalanceKey = anAccountBalanceKey;
 	}
 }
