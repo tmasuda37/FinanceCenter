@@ -19,7 +19,7 @@ import com.tmasuda.fc.repo.AccountBalanceRepo;
 import com.tmasuda.fc.util.SenarioProvider;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class AccountBalanceCtrlTest extends SenarioProvider {
 
 	@Autowired
