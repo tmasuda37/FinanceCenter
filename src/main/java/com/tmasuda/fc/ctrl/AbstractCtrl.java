@@ -1,5 +1,7 @@
 package com.tmasuda.fc.ctrl;
 
+import javax.transaction.Transactional;
+
 public abstract class AbstractCtrl<T> {
 
 	public abstract T getSavedModel(T instantiated);
@@ -10,6 +12,7 @@ public abstract class AbstractCtrl<T> {
 
 	public abstract void postRun(T committed);
 
+	@Transactional
 	public T getOrCreateModel(T instantiated) {
 		T savedModel = getSavedModel(instantiated);
 
