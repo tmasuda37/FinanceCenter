@@ -17,7 +17,7 @@ import com.tmasuda.fc.repo.HouseHoldRepo;
 import com.tmasuda.fc.util.SenarioProvider;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class HouseHoldCtrlTest extends SenarioProvider {
 
 	@Autowired
