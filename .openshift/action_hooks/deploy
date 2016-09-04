@@ -1,0 +1,28 @@
+# prevent infinite loop
+if pgrep deploy | wc -l | egrep -q '^2$'
+then
+    exit 0
+fi
+
+# Lets abuse the deploy script
+echo
+echo "Kicking off build (From deploy script)"
+echo
+
+cd $OPENSHIFT_REPO_DIR
+mvn -e clean package -Popenshift -DskipTests
+
+echo.
+echo "preparing new build (from pre_start)"
+echo
+
+gear prepare
+
+echo
+echo "activating new build (from pre_start script)"
+echo
+# Note: This assumes keep-deployments is set to 1
+gear activate `gear deployments | awk -F' - ' '/NEVER/{ print $2 }'`
+
+# One last stop so the final start will work
+gear stop
