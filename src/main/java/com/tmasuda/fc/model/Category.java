@@ -12,14 +12,6 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Category {
 
-	private static final CategoryApplyTo DEFAULT_CATEGORY_APPLY_TO = CategoryApplyTo.Wallet;
-
-	private static final boolean DEFAULT_TO_EXPENSE = true;
-
-	private static final boolean DEFAULT_TO_TAX_RETURN = false;
-
-	private static final boolean DEFAULT_TO_REIMBURSE = false;
-
 	@Id
 	@Column(name = "public_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,25 +39,44 @@ public class Category {
 	public Category() {
 	}
 
-	public Category(Long publicId) {
-		this.publicId = publicId;
+	public Category(CategoryBuilder categoryBuilder) {
+		this.houseHold = categoryBuilder.houseHold;
+		this.categoryApplyTo = categoryBuilder.categoryApplyTo;
+		this.name = categoryBuilder.name;
+		this.toExpense = categoryBuilder.toExpense;
+		this.toTaxReturn = categoryBuilder.toTaxReturn;
+		this.toReimburse = categoryBuilder.toReimburse;
 	}
 
-	public Category(HouseHold houseHold, String name) {
-		this(houseHold, DEFAULT_CATEGORY_APPLY_TO, name, DEFAULT_TO_EXPENSE, DEFAULT_TO_TAX_RETURN, DEFAULT_TO_REIMBURSE);
-	}
+	public static class CategoryBuilder {
+		private final HouseHold houseHold;
+		private final CategoryApplyTo categoryApplyTo;
+		private final String name;
+		private boolean toExpense;
+		private boolean toTaxReturn;
+		private boolean toReimburse;
 
-	public Category(HouseHold houseHold, String name, boolean toExpense) {
-		this(houseHold, DEFAULT_CATEGORY_APPLY_TO, name, toExpense, DEFAULT_TO_TAX_RETURN, DEFAULT_TO_REIMBURSE);
-	}
+		public CategoryBuilder(HouseHold houseHold, CategoryApplyTo categoryApplyTo, String name, boolean toExpense) {
+			this.houseHold = houseHold;
+			this.categoryApplyTo = categoryApplyTo;
+			this.name = name;
+			this.toExpense = toExpense;
+		}
 
-	public Category(HouseHold houseHold, CategoryApplyTo categoryApplyTo, String name, boolean toExpense, boolean toTaxReturn, boolean toReimburse) {
-		this.houseHold = houseHold;
-		this.categoryApplyTo = categoryApplyTo;
-		this.name = name;
-		this.toExpense = toExpense;
-		this.toTaxReturn = toTaxReturn;
-		this.toReimburse = toReimburse;
+		public CategoryBuilder toTaxReturn(boolean toTaxReturn) {
+			this.toTaxReturn = toTaxReturn;
+			return this;
+		}
+
+		public CategoryBuilder toReimburse(boolean toReimburse) {
+			this.toReimburse = toReimburse;
+			return this;
+		}
+
+		public Category build() {
+			return new Category(this);
+		}
+
 	}
 
 }

@@ -10,7 +10,6 @@ import com.tmasuda.fc.ctrl.AccountCtrl;
 import com.tmasuda.fc.ctrl.CategoryCtrl;
 import com.tmasuda.fc.ctrl.TransactionCtrl;
 import com.tmasuda.fc.model.Account;
-import com.tmasuda.fc.model.Category;
 import com.tmasuda.fc.model.Transaction;
 
 public class SenarioProvider {
@@ -27,7 +26,7 @@ public class SenarioProvider {
 
 	public static final String CATEGORY_INCOME = "Income";
 
-	public Account anAccount;
+	public Account account;
 
 	@Autowired
 	private AccountCtrl accountCtrl;
@@ -39,11 +38,11 @@ public class SenarioProvider {
 	private CategoryCtrl categoryCtrl;
 
 	public Account createNewAccount(String methodName) {
-		return accountCtrl.getOrCreateModel(new Account(methodName + "-hh", methodName + "-sns"));
+		return accountCtrl.createAccount(methodName);
 	}
 
 	public Account createNewAccount(String houseHoldId, String snsId) {
-		return accountCtrl.getOrCreateModel(new Account(houseHoldId, snsId));
+		return accountCtrl.createAccountWithHouseHold(snsId, houseHoldId);
 	}
 
 	public Transaction incomesForIncomeInEUR(String methodName, BigDecimal amount) {
@@ -83,23 +82,25 @@ public class SenarioProvider {
 	}
 
 	private Transaction createTransactionObj(String methodName, BigDecimal amount, String categoryName, Currency currency) {
-		anAccount = createNewAccount(methodName);
+		account = createNewAccount(methodName);
 
 		Transaction aTransaction = new Transaction();
-		aTransaction.account = anAccount;
+		aTransaction.account = account;
 		aTransaction.amount = amount;
+
 		if (categoryName == CATEGORY_FOOD || categoryName == CATEGORY_MEDICAL) {
-			aTransaction.category = categoryCtrl.getOrCreateModel(new Category(aTransaction.account.houseHold, categoryName, true));
+			aTransaction.category = categoryCtrl.createWalletExpenseCategory(account.houseHold, categoryName);
 		} else if (categoryName == CATEGORY_INCOME) {
-			aTransaction.category = categoryCtrl.getOrCreateModel(new Category(aTransaction.account.houseHold, categoryName, false));
+			aTransaction.category = categoryCtrl.createWalletIncomeCategory(account.houseHold, categoryName);
 		}
+
 		aTransaction.currency = currency;
 		aTransaction.calendar = Calendar.getInstance();
 		aTransaction.description = methodName;
 		aTransaction.event = null;
 		aTransaction.place = null;
 
-		return transactionCtrl.getOrCreateModel(aTransaction);
+		return transactionCtrl.createTransaction(aTransaction);
 	}
 
 }

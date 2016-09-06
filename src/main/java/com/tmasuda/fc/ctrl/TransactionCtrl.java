@@ -1,5 +1,7 @@
 package com.tmasuda.fc.ctrl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -7,7 +9,7 @@ import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.repo.TransactionRepo;
 
 @Controller
-public class TransactionCtrl extends AbstractCtrl<Transaction> {
+public class TransactionCtrl {
 
 	@Autowired
 	private TransactionRepo transactionRepo;
@@ -15,23 +17,13 @@ public class TransactionCtrl extends AbstractCtrl<Transaction> {
 	@Autowired
 	private AccountBalanceCtrl accountBalanceCtrl;
 
-	@Override
-	public Transaction getSavedModel(Transaction instantiated) {
-		return null;
-	}
+	@Transactional
+	public Transaction createTransaction(Transaction newTransaction) {
+		Transaction savedTransaction = transactionRepo.save(newTransaction);
 
-	@Override
-	public Transaction createNewModel(Transaction instantiated) {
-		return transactionRepo.save(instantiated);
-	}
+		accountBalanceCtrl.updateBalance(savedTransaction);
 
-	@Override
-	public void preRun(Transaction instantiated) {
-	}
-
-	@Override
-	public void postRun(Transaction committed) {
-		accountBalanceCtrl.updateBalance(committed);
+		return savedTransaction;
 	}
 
 }

@@ -2,6 +2,8 @@ package com.tmasuda.fc.ctrl;
 
 import java.math.BigDecimal;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,7 +13,7 @@ import com.tmasuda.fc.model.key.AccountBalanceKey;
 import com.tmasuda.fc.repo.AccountBalanceRepo;
 
 @Controller
-public class AccountBalanceCtrl extends AbstractCtrl<AccountBalance> {
+public class AccountBalanceCtrl {
 
 	@Autowired
 	private MonthlyCategoryBalanceCtrl categoryBalanceCtrl;
@@ -19,35 +21,18 @@ public class AccountBalanceCtrl extends AbstractCtrl<AccountBalance> {
 	@Autowired
 	private AccountBalanceRepo accountBalanceRepo;
 
-	@Override
-	public AccountBalance getSavedModel(AccountBalance instantiated) {
-		return accountBalanceRepo.findOne(instantiated.anAccountBalanceKey);
-	}
-
-	@Override
-	public AccountBalance createNewModel(AccountBalance instantiated) {
-		return accountBalanceRepo.save(instantiated);
-	}
-
-	@Override
-	public void preRun(AccountBalance instantiated) {
-	}
-
-	@Override
-	public void postRun(AccountBalance committed) {
-	}
-
 	public AccountBalance getBalance(Transaction aTransaction) {
 		AccountBalance instantiated = getBalance(getBalanceKey(aTransaction));
 		return accountBalanceRepo.findOne(instantiated.anAccountBalanceKey);
 	}
 
-	public void updateBalance(Transaction aTransaction) {
-		AccountBalance instantiated = getBalance(getBalanceKey(aTransaction));
-		instantiated.amount = calcBalance(instantiated, aTransaction);
-		accountBalanceRepo.save(instantiated);
+	@Transactional
+	public void updateBalance(Transaction savedTransaction) {
+		AccountBalance updatingAccountBalance = getBalance(getBalanceKey(savedTransaction));
+		updatingAccountBalance.amount = calcBalance(updatingAccountBalance, savedTransaction);
+		accountBalanceRepo.save(updatingAccountBalance);
 
-		categoryBalanceCtrl.updateBalance(aTransaction);
+		categoryBalanceCtrl.updateBalance(savedTransaction);
 	}
 
 	protected BigDecimal calcBalance(AccountBalance aBalance, Transaction aTransaction) {
@@ -62,8 +47,15 @@ public class AccountBalanceCtrl extends AbstractCtrl<AccountBalance> {
 		return result;
 	}
 
-	private AccountBalance getBalance(AccountBalanceKey anAccountBalanceKey) {
-		return getOrCreateModel(new AccountBalance(anAccountBalanceKey));
+	private AccountBalance getBalance(AccountBalanceKey accountBalanceKey) {
+		AccountBalance existing = accountBalanceRepo.findOne(accountBalanceKey);
+		if (existing != null) {
+			return existing;
+		}
+
+		AccountBalance newAccountBalance = new AccountBalance();
+		newAccountBalance.anAccountBalanceKey = accountBalanceKey;
+		return accountBalanceRepo.save(newAccountBalance);
 	}
 
 	private AccountBalanceKey getBalanceKey(Transaction aTransaction) {

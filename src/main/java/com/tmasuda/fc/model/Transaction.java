@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Transaction {
 
@@ -20,6 +22,7 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long publicId;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "account_id")
 	public Account account;

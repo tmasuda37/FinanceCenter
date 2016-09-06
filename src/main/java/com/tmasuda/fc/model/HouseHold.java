@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class HouseHold {
 
@@ -15,6 +17,7 @@ public class HouseHold {
 	@Column
 	public String houseHoldId;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "houseHold")
 	public Set<Account> accounts = new HashSet<Account>();
 
