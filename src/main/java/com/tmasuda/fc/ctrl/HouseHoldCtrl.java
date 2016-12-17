@@ -1,35 +1,29 @@
 package com.tmasuda.fc.ctrl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 
 import com.tmasuda.fc.model.HouseHold;
 import com.tmasuda.fc.repo.HouseHoldRepo;
 
 @Controller
-public class HouseHoldCtrl extends AbstractCtrl<HouseHold> {
+public class HouseHoldCtrl {
 
 	@Autowired
 	private HouseHoldRepo houseHoldRepo;
 
-	@Override
-	public HouseHold getSavedModel(HouseHold instantiated) {
-		Example<HouseHold> example = Example.of(instantiated);
-		return houseHoldRepo.findOne(example);
+	public HouseHold findHouseHoldByHouseHoldId(String houseHoldId) {
+		return houseHoldRepo.findOne(houseHoldId);
 	}
 
-	@Override
-	public HouseHold createNewModel(HouseHold instantiated) {
-		return houseHoldRepo.save(instantiated);
-	}
+	public HouseHold createHouseHold(String houseHoldId) {
+		HouseHold existing = this.findHouseHoldByHouseHoldId(houseHoldId);
+		if (existing != null) {
+			return existing;
+		}
 
-	@Override
-	public void preRun(HouseHold instantiated) {
+		HouseHold newHouseHold = new HouseHold();
+		newHouseHold.houseHoldId = houseHoldId;
+		return houseHoldRepo.save(newHouseHold);
 	}
-
-	@Override
-	public void postRun(HouseHold committed) {
-	}
-
 }
