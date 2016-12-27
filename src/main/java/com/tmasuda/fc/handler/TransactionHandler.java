@@ -31,7 +31,7 @@ public class TransactionHandler {
 	@Autowired
 	private TransactionCtrl transactionCtrl;
 
-	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
 	public AccountBalance create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody Transaction aTransaction) throws Exception {
 		aTransaction.account = accountCtrl.findAccountBySnsId(snsId);
