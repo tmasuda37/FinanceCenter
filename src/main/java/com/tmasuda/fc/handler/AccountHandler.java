@@ -21,7 +21,7 @@ public class AccountHandler {
 	@Autowired
 	private CategoryCtrl categoryCtrl;
 
-	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
 	public Account create(@RequestAttribute(value = "SNS_ID") String snsId) throws Exception {
 		Account newAccount = accountCtrl.createAccount(snsId);
