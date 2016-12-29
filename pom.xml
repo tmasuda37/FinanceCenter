@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.tmasuda.fc</groupId>
-    <artifactId>tmasuda-finance-center</artifactId>
+    <artifactId>finance-center-backend</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>FinanceCenter</name>
-    <description>Tracking Expenses in Sprint Boot Project with Tomcat</description>
+    <name>finance-center-backend</name>
+    <description>Tracking Expenses in Sprint Boot Project with Heroku</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
