@@ -1,2 +1,1 @@
-# FinanceCenter
-Tracking Expenses in Sprint Boot Project with Tomcat
+Tracking Expenses in Sprint Boot Project with Heroku
