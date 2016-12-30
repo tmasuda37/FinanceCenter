@@ -13,4 +13,6 @@ public interface CategoryRepo extends JpaRepository<Category, Long> {
 
 	public List<Category> findAllByHouseHoldAndToExpense(HouseHold houseHold, boolean toExpense);
 
+	public List<Category> findAllByHouseHold(HouseHold houseHold);
+
 }
