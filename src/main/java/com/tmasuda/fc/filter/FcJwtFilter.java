@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -27,35 +28,41 @@ public class FcJwtFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletReponse, FilterChain chain) throws ServletException, IOException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws ServletException, IOException {
 
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final String authHeader = httpRequest.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith(OAUTH_START_WITH)) {
-            throw new ServletException("Missing or invalid Authorization header.");
+            HttpServletResponse response = (HttpServletResponse) servletResponse;
+            response.sendError(401, "Unauthorized Access");
+        } else {
+            final String token = authHeader.split(OAUTH_START_WITH)[1];
+            final JWTVerifier jwtVerifier = new JWTVerifier(jsonWebTokenProperties.getSecretKey(), jsonWebTokenProperties.getAudience(), jsonWebTokenProperties.getIssuer());
+
+            try {
+                Map<String, Object> claims = jwtVerifier.verify(token);
+                final String snsId = (String) claims.get("sub");
+                httpRequest.setAttribute("SNS_ID", snsId);
+                chain.doFilter(httpRequest, servletResponse);
+            } catch (InvalidKeyException e) {
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.sendError(401, "Unauthorized Access");
+            } catch (NoSuchAlgorithmException e) {
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.sendError(401, "Unauthorized Access");
+            } catch (IllegalStateException e) {
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.sendError(401, "Unauthorized Access");
+            } catch (SignatureException e) {
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.sendError(401, "Unauthorized Access");
+            } catch (JWTVerifyException e) {
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                response.sendError(401, "Unauthorized Access");
+            }
         }
 
-        final String token = authHeader.split(OAUTH_START_WITH)[1];
-        final JWTVerifier jwtVerifier = new JWTVerifier(jsonWebTokenProperties.getSecretKey(), jsonWebTokenProperties.getAudience(), jsonWebTokenProperties.getIssuer());
-
-        try {
-            Map<String, Object> claims = jwtVerifier.verify(token);
-            final String snsId = (String) claims.get("sub");
-            httpRequest.setAttribute("SNS_ID", snsId);
-        } catch (InvalidKeyException e) {
-            throw new IOException("Invalid JWT.");
-        } catch (NoSuchAlgorithmException e) {
-            throw new IOException("Invalid JWT.");
-        } catch (IllegalStateException e) {
-            throw new IOException("Invalid JWT.");
-        } catch (SignatureException e) {
-            throw new IOException("Invalid JWT.");
-        } catch (JWTVerifyException e) {
-            throw new IOException("Invalid JWT.");
-        }
-
-        chain.doFilter(httpRequest, servletReponse);
     }
 
 }
