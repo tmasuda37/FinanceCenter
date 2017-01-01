@@ -2,6 +2,8 @@ package com.tmasuda.fc.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,8 @@ import com.tmasuda.fc.ctrl.CategoryCtrl;
 import com.tmasuda.fc.ctrl.TransactionCtrl;
 import com.tmasuda.fc.model.AccountBalance;
 import com.tmasuda.fc.model.Transaction;
+
+import javax.validation.Valid;
 
 @RequestMapping("/transaction")
 @Controller
@@ -33,7 +37,7 @@ public class TransactionHandler {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public AccountBalance create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody Transaction aTransaction) throws Exception {
+	public AccountBalance create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Transaction aTransaction) throws Exception {
 		aTransaction.account = accountCtrl.findAccountBySnsId(snsId);
 
 		if (aTransaction.account == null) {
