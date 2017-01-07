@@ -1,21 +1,19 @@
 package com.tmasuda.fc.handler;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.tmasuda.fc.ctrl.AccountBalanceCtrl;
 import com.tmasuda.fc.ctrl.AccountCtrl;
 import com.tmasuda.fc.ctrl.CategoryCtrl;
 import com.tmasuda.fc.ctrl.TransactionCtrl;
+import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.AccountBalance;
 import com.tmasuda.fc.model.Transaction;
+import com.tmasuda.fc.model.TransactionFilter;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,36 +21,54 @@ import javax.validation.Valid;
 @Controller
 public class TransactionHandler {
 
-	@Autowired
-	private AccountCtrl accountCtrl;
+    private static final Logger _logger = Logger.getLogger(TransactionHandler.class);
 
-	@Autowired
-	private AccountBalanceCtrl accountBalanceCtrl;
+    @Autowired
+    private AccountCtrl accountCtrl;
 
-	@Autowired
-	private CategoryCtrl categoryCtrl;
+    @Autowired
+    private AccountBalanceCtrl accountBalanceCtrl;
 
-	@Autowired
-	private TransactionCtrl transactionCtrl;
+    @Autowired
+    private CategoryCtrl categoryCtrl;
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	@ResponseBody
-	public AccountBalance create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Transaction aTransaction) throws Exception {
-		aTransaction.account = accountCtrl.findAccountBySnsId(snsId);
+    @Autowired
+    private TransactionCtrl transactionCtrl;
 
-		if (aTransaction.account == null) {
-			throw new Exception("Account Error!");
-		}
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    public AccountBalance create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Transaction aTransaction) throws Exception {
+        aTransaction.account = accountCtrl.findAccountBySnsId(snsId);
 
-		aTransaction.category = categoryCtrl.findCategoryByPublicIdAndHouseHold(aTransaction.category.publicId, aTransaction.account.houseHold);
+        if (aTransaction.account == null) {
+            throw new Exception("Account Error!");
+        }
 
-		if (aTransaction.category == null) {
-			throw new Exception("Category Error!");
-		}
+        aTransaction.category = categoryCtrl.findCategoryByPublicIdAndHouseHold(aTransaction.category.publicId, aTransaction.account.houseHold);
 
-		aTransaction = transactionCtrl.createTransaction(aTransaction);
+        if (aTransaction.category == null) {
+            throw new Exception("Category Error!");
+        }
 
-		return accountBalanceCtrl.getBalance(aTransaction);
-	}
+        aTransaction = transactionCtrl.createTransaction(aTransaction);
+
+        return accountBalanceCtrl.getBalance(aTransaction);
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Transaction> list(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter aTransactionFilter) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        _logger.debug("Filter parameters: " + aTransactionFilter.toString());
+
+        PageRequest aPageRequest = new PageRequest(aTransactionFilter.page, aTransactionFilter.size);
+
+        return transactionCtrl.list(aPageRequest, anAccount);
+    }
 
 }
