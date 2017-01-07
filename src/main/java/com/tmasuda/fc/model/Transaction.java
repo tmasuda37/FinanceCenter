@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,6 +32,7 @@ public class Transaction {
 	public Calendar calendar;
 
 	@Column
+	@NotNull(message = "Amount cannot be null or empty.")
 	public BigDecimal amount;
 
 	@Column
