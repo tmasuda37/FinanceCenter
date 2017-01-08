@@ -1,22 +1,41 @@
 package com.tmasuda.fc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Event {
-	@Id
-	@Column(name = "public_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long publicId;
+    @Id
+    @Column(name = "public_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long publicId;
 
-	@ManyToOne
-	public HouseHold houseHold;
+    @ManyToOne
+    public HouseHold houseHold;
 
-	@Column
-	public String name;
+    @Column
+    @NotNull(message = "Name cannot be null or empty.")
+    public String name;
+
+    public Event() {
+    }
+
+    public Event(EventBuilder eventBuilder) {
+        this.houseHold = eventBuilder.houseHold;
+        this.name = eventBuilder.name;
+    }
+
+    public static class EventBuilder {
+        private final HouseHold houseHold;
+        private final String name;
+
+        public EventBuilder(HouseHold houseHold, String name) {
+            this.houseHold = houseHold;
+            this.name = name;
+        }
+
+        public Event build() {
+            return new Event(this);
+        }
+    }
 }
