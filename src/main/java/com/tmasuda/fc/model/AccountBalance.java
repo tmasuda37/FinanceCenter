@@ -1,28 +1,27 @@
 package com.tmasuda.fc.model;
 
-import java.math.BigDecimal;
+import com.tmasuda.fc.model.key.AccountBalanceKey;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
-import com.tmasuda.fc.model.key.AccountBalanceKey;
+import java.math.BigDecimal;
 
 @Entity
 public class AccountBalance {
 
-	@EmbeddedId
-	public AccountBalanceKey anAccountBalanceKey;
+    @EmbeddedId
+    public AccountBalanceKey anAccountBalanceKey;
 
-	@Column
-	public BigDecimal amount = BigDecimal.ZERO;
+    @Column
+    public BigDecimal amount = BigDecimal.ZERO;
 
-	public AccountBalance() {
-		super();
-	}
+    public AccountBalance() {
+        super();
+    }
 
-	public AccountBalance(AccountBalanceKey anAccountBalanceKey) {
-		super();
-		this.anAccountBalanceKey = anAccountBalanceKey;
-	}
+    public AccountBalance(AccountBalanceKey anAccountBalanceKey) {
+        super();
+        this.anAccountBalanceKey = anAccountBalanceKey;
+    }
 }

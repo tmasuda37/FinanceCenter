@@ -18,13 +18,13 @@ public class FinanceCenterApplication extends SpringBootServletInitializer imple
     @Autowired
     private JsonWebTokenProperties jsonWebTokenProperties;
 
+    public static void main(String[] args) {
+        SpringApplication.run(FinanceCenterApplication.class, args);
+    }
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(FinanceCenterApplication.class);
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(FinanceCenterApplication.class, args);
     }
 
     @Bean
