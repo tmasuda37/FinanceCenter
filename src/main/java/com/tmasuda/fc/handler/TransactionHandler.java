@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/transaction")
 @Controller
@@ -53,6 +54,30 @@ public class TransactionHandler {
         aTransaction = transactionCtrl.createTransaction(aTransaction);
 
         return accountBalanceCtrl.getBalance(aTransaction);
+    }
+
+    @RequestMapping(value = "/createAll", method = RequestMethod.POST)
+    @ResponseBody
+    public void createAll(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid List<Transaction> transactionList) throws Exception {
+        for (Transaction aTransaction : transactionList) {
+            aTransaction.account = accountCtrl.findAccountBySnsId(snsId);
+
+            if (aTransaction.account == null) {
+                throw new Exception("Account Error!");
+            }
+
+            aTransaction.category = categoryCtrl.findCategoryByPublicIdAndHouseHold(aTransaction.category.publicId, aTransaction.account.houseHold);
+
+            if (aTransaction.category == null) {
+                throw new Exception("Category Error!");
+            }
+
+            if (!transactionCtrl.hasSameTransaction(aTransaction)) {
+                transactionCtrl.createTransaction(aTransaction);
+            } else {
+                _logger.warn("This is skipped as the transaction may be duplicated." + aTransaction.toString());
+            }
+        }
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
