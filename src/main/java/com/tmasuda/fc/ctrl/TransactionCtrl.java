@@ -28,6 +28,10 @@ public class TransactionCtrl {
         return savedTransaction;
     }
 
+    public boolean hasSameTransaction(Transaction newTransaction) {
+        return transactionRepo.countByCalendarAndAmountAndDescription(newTransaction.calendar, newTransaction.amount, newTransaction.description).intValue() > 0;
+    }
+
     public Page<Transaction> list(PageRequest aPageRequest, Account anAccount) {
         return transactionRepo.findByAccount(aPageRequest, anAccount);
     }

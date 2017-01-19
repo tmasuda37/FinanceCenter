@@ -43,4 +43,18 @@ public class Transaction {
     @Column
     public String description;
 
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                ", account=" + account +
+                ", calendar=" + calendar +
+                ", amount=" + amount +
+                ", currency=" + currency +
+                ", category=" + category +
+                ", place=" + place +
+                ", event=" + event +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
 }
