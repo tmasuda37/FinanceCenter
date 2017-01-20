@@ -1,14 +1,16 @@
 package com.tmasuda.fc.ctrl;
 
+import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.AccountBalance;
 import com.tmasuda.fc.model.Transaction;
-import com.tmasuda.fc.model.key.AccountBalanceKey;
 import com.tmasuda.fc.repo.AccountBalanceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.Currency;
+import java.util.List;
 
 @Controller
 public class AccountBalanceCtrl {
@@ -19,18 +21,19 @@ public class AccountBalanceCtrl {
     @Autowired
     private AccountBalanceRepo accountBalanceRepo;
 
-    public AccountBalance getBalance(Transaction aTransaction) {
-        AccountBalance instantiated = getBalance(getBalanceKey(aTransaction));
-        return accountBalanceRepo.findOne(instantiated.anAccountBalanceKey);
-    }
-
     @Transactional
     public void updateBalance(Transaction savedTransaction) {
-        AccountBalance updatingAccountBalance = getBalance(getBalanceKey(savedTransaction));
+        AccountBalance updatingAccountBalance = getBalance(savedTransaction);
         updatingAccountBalance.amount = calcBalance(updatingAccountBalance, savedTransaction);
         accountBalanceRepo.save(updatingAccountBalance);
 
         categoryBalanceCtrl.updateBalance(savedTransaction);
+    }
+
+    public List<AccountBalance> getBalance(Account anAccount, Currency currency) {
+        return accountBalanceRepo.findAllByAccountAndCurrency(
+                anAccount,
+                currency);
     }
 
     protected BigDecimal calcBalance(AccountBalance aBalance, Transaction aTransaction) {
@@ -45,19 +48,23 @@ public class AccountBalanceCtrl {
         return result;
     }
 
-    private AccountBalance getBalance(AccountBalanceKey accountBalanceKey) {
-        AccountBalance existing = accountBalanceRepo.findOne(accountBalanceKey);
+    public AccountBalance getBalance(Transaction transaction) {
+        AccountBalance existing = accountBalanceRepo
+                .findOneByAccountAndCurrencyAndCategoryApplyTo(
+                        transaction.account,
+                        transaction.currency,
+                        transaction.category.categoryApplyTo);
+
         if (existing != null) {
             return existing;
         }
 
-        AccountBalance newAccountBalance = new AccountBalance();
-        newAccountBalance.anAccountBalanceKey = accountBalanceKey;
+        AccountBalance newAccountBalance = new AccountBalance(
+                transaction.account,
+                transaction.currency,
+                transaction.category.categoryApplyTo);
         return accountBalanceRepo.save(newAccountBalance);
     }
 
-    private AccountBalanceKey getBalanceKey(Transaction aTransaction) {
-        return new AccountBalanceKey(aTransaction.account, aTransaction.currency, aTransaction.category.categoryApplyTo);
-    }
 
 }
