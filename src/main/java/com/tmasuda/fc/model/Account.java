@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.Currency;
 
 @Entity
 public class Account {
@@ -17,6 +18,9 @@ public class Account {
     @NaturalId
     @Column
     public String snsId;
+
+    @Column
+    public Currency defaultCurrency;
 
     @ManyToOne
     @JoinColumn(name = "house_hold_id", nullable = true)

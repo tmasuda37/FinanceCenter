@@ -10,8 +10,6 @@ import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.model.TransactionFilter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,18 +80,14 @@ public class TransactionHandler {
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public Page<Transaction> list(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter aTransactionFilter) throws Exception {
+    public List<Transaction> list(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter transactionFilter) throws Exception {
         Account anAccount = accountCtrl.findAccountBySnsId(snsId);
 
         if (anAccount == null) {
             throw new Exception("Account Error!");
         }
 
-        _logger.debug("Filter parameters: " + aTransactionFilter.toString());
-
-        PageRequest aPageRequest = new PageRequest(aTransactionFilter.page, aTransactionFilter.size);
-
-        return transactionCtrl.list(aPageRequest, anAccount);
+        return transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
     }
 
 }

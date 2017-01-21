@@ -1,8 +1,17 @@
 package com.tmasuda.fc.repo;
 
+import com.tmasuda.fc.model.Account;
+import com.tmasuda.fc.model.Category;
 import com.tmasuda.fc.model.MonthlyCategoryBalance;
-import com.tmasuda.fc.model.key.MonthlyCategoryBalanceKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MonthlyCategoryBalanceRepo extends JpaRepository<MonthlyCategoryBalance, MonthlyCategoryBalanceKey> {
+import java.util.Currency;
+import java.util.List;
+
+public interface MonthlyCategoryBalanceRepo extends JpaRepository<MonthlyCategoryBalance, Long> {
+
+    MonthlyCategoryBalance findOneByAccountAndCurrencyAndCategoryAndYearAndMonth(Account account, Currency currency, Category category, int year, int month);
+
+    List<MonthlyCategoryBalance> findAllByAccountAndCurrencyAndYearAndMonth(Account account, Currency currency, int year, int month);
+
 }

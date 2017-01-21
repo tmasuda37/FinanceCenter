@@ -5,6 +5,8 @@ import com.tmasuda.fc.repo.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.Currency;
+
 @Controller
 public class AccountCtrl {
 
@@ -31,6 +33,7 @@ public class AccountCtrl {
 
         Account newAccount = new Account();
         newAccount.snsId = snsId;
+        newAccount.defaultCurrency = Currency.getInstance("EUR");
         newAccount.houseHold = houseHoldCtrl.createHouseHold(houseHoldId);
         return accountRepo.save(newAccount);
     }

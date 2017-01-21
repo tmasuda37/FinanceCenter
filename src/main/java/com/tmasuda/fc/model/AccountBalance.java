@@ -1,17 +1,27 @@
 package com.tmasuda.fc.model;
 
-import com.tmasuda.fc.model.key.AccountBalanceKey;
-
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Currency;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"account_public_id", "currency", "categoryApplyTo"}))
 public class AccountBalance {
 
-    @EmbeddedId
-    public AccountBalanceKey anAccountBalanceKey;
+    @Id
+    @Column(name = "public_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long publicId;
+
+    @ManyToOne
+    public Account account;
+
+    @Column
+    public Currency currency;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    public CategoryApplyTo categoryApplyTo;
 
     @Column
     public BigDecimal amount = BigDecimal.ZERO;
@@ -20,8 +30,10 @@ public class AccountBalance {
         super();
     }
 
-    public AccountBalance(AccountBalanceKey anAccountBalanceKey) {
-        super();
-        this.anAccountBalanceKey = anAccountBalanceKey;
+    public AccountBalance(Account account, Currency currency, CategoryApplyTo categoryApplyTo) {
+        this.account = account;
+        this.currency = currency;
+        this.categoryApplyTo = categoryApplyTo;
     }
+
 }
