@@ -49,7 +49,7 @@ public class TransactionHandler {
             throw new Exception("Category Error!");
         }
 
-        aTransaction = transactionCtrl.createTransaction(aTransaction);
+        transactionCtrl.createOrSaveTransaction(aTransaction);
 
         return accountBalanceCtrl.getBalance(aTransaction);
     }
@@ -71,7 +71,7 @@ public class TransactionHandler {
             }
 
             if (!transactionCtrl.hasSameTransaction(aTransaction)) {
-                transactionCtrl.createTransaction(aTransaction);
+                transactionCtrl.createOrSaveTransaction(aTransaction);
             } else {
                 _logger.warn("This is skipped as the transaction may be duplicated." + aTransaction.toString());
             }
@@ -88,6 +88,18 @@ public class TransactionHandler {
         }
 
         return transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
+    }
+
+    @RequestMapping(value = "/retrieve", method = RequestMethod.POST)
+    @ResponseBody
+    public Transaction retrieve(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody Transaction transaction) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        return transactionCtrl.retrieve(transaction.publicId);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
