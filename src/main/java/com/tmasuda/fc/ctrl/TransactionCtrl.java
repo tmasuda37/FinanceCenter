@@ -3,7 +3,6 @@ package com.tmasuda.fc.ctrl;
 import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.repo.TransactionRepo;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -28,6 +27,16 @@ public class TransactionCtrl {
         accountBalanceCtrl.updateBalance(savedTransaction);
 
         return savedTransaction;
+    }
+
+    @Transactional
+    public void delete(Long publicId) {
+        Transaction transaction = transactionRepo.findOne(publicId);
+        transactionRepo.delete(transaction);
+
+        transaction.amount = transaction.amount.negate();
+
+        accountBalanceCtrl.updateBalance(transaction);
     }
 
     public boolean hasSameTransaction(Transaction newTransaction) {

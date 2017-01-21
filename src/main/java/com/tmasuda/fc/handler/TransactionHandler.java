@@ -90,4 +90,16 @@ public class TransactionHandler {
         return transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
     }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public void delete(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody Transaction transaction) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        transactionCtrl.delete(transaction.publicId);
+    }
+
 }
