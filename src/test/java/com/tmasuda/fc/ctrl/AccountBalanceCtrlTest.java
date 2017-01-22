@@ -2,7 +2,7 @@ package com.tmasuda.fc.ctrl;
 
 import com.tmasuda.fc.repo.AccountBalanceRepo;
 import com.tmasuda.fc.repo.CategoryRepo;
-import com.tmasuda.fc.util.SenarioProvider;
+import com.tmasuda.fc.util.ScenarioProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-public class AccountBalanceCtrlTest extends SenarioProvider {
+public class AccountBalanceCtrlTest extends ScenarioProvider {
 
     @Autowired
     AccountBalanceCtrl accountBalanceCtrl;

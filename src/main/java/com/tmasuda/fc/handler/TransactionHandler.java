@@ -4,10 +4,7 @@ import com.tmasuda.fc.ctrl.AccountBalanceCtrl;
 import com.tmasuda.fc.ctrl.AccountCtrl;
 import com.tmasuda.fc.ctrl.CategoryCtrl;
 import com.tmasuda.fc.ctrl.TransactionCtrl;
-import com.tmasuda.fc.model.Account;
-import com.tmasuda.fc.model.AccountBalance;
-import com.tmasuda.fc.model.Transaction;
-import com.tmasuda.fc.model.TransactionFilter;
+import com.tmasuda.fc.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +31,12 @@ public class TransactionHandler {
 
     @Autowired
     private TransactionCtrl transactionCtrl;
+
+    @RequestMapping(value = "/apply-to-list", method = RequestMethod.GET)
+    @ResponseBody
+    public ApplyTo[] getApplyToList() {
+        return ApplyTo.values();
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody

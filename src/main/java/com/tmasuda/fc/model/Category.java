@@ -2,8 +2,10 @@ package com.tmasuda.fc.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"house_hold_house_hold_id", "name", "toExpense"}))
 public class Category {
 
     @Id
@@ -15,11 +17,7 @@ public class Category {
     public HouseHold houseHold;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "CategoryApplyTo cannot be null or empty.")
-    public CategoryApplyTo categoryApplyTo;
-
-    @Column
+    @Size(min = 1)
     @NotNull(message = "Name cannot be null or empty.")
     public String name;
 
@@ -37,7 +35,6 @@ public class Category {
 
     public Category(CategoryBuilder categoryBuilder) {
         this.houseHold = categoryBuilder.houseHold;
-        this.categoryApplyTo = categoryBuilder.categoryApplyTo;
         this.name = categoryBuilder.name;
         this.toExpense = categoryBuilder.toExpense;
         this.toTaxReturn = categoryBuilder.toTaxReturn;
@@ -46,15 +43,13 @@ public class Category {
 
     public static class CategoryBuilder {
         private final HouseHold houseHold;
-        private final CategoryApplyTo categoryApplyTo;
         private final String name;
         private boolean toExpense;
         private boolean toTaxReturn;
         private boolean toReimburse;
 
-        public CategoryBuilder(HouseHold houseHold, CategoryApplyTo categoryApplyTo, String name, boolean toExpense) {
+        public CategoryBuilder(HouseHold houseHold, String name, boolean toExpense) {
             this.houseHold = houseHold;
-            this.categoryApplyTo = categoryApplyTo;
             this.name = name;
             this.toExpense = toExpense;
         }

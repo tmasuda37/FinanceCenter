@@ -50,10 +50,10 @@ public class AccountBalanceCtrl {
 
     public AccountBalance getBalance(Transaction transaction) {
         AccountBalance existing = accountBalanceRepo
-                .findOneByAccountAndCurrencyAndCategoryApplyTo(
+                .findOneByAccountAndCurrencyAndApplyTo(
                         transaction.account,
                         transaction.currency,
-                        transaction.category.categoryApplyTo);
+                        transaction.applyTo);
 
         if (existing != null) {
             return existing;
@@ -62,7 +62,7 @@ public class AccountBalanceCtrl {
         AccountBalance newAccountBalance = new AccountBalance(
                 transaction.account,
                 transaction.currency,
-                transaction.category.categoryApplyTo);
+                transaction.applyTo);
         return accountBalanceRepo.save(newAccountBalance);
     }
 

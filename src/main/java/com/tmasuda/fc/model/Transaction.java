@@ -25,6 +25,11 @@ public class Transaction {
     public Calendar calendar;
 
     @Column
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "ApplyTo cannot be null or empty.")
+    public ApplyTo applyTo;
+
+    @Column
     @NotNull(message = "Amount cannot be null or empty.")
     public BigDecimal amount;
 
@@ -49,14 +54,17 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
+                "publicId=" + publicId +
                 ", account=" + account +
                 ", calendar=" + calendar +
+                ", applyTo=" + applyTo +
                 ", amount=" + amount +
                 ", currency=" + currency +
                 ", category=" + category +
                 ", place=" + place +
                 ", event=" + event +
                 ", description='" + description + '\'' +
+                ", toExpense=" + toExpense +
                 '}';
     }
 

@@ -10,8 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class TransactionCtrlTest {
 
-	@Test
-	public void createNewExpenseTransaction() {
-	}
+    @Test
+    public void createNewExpenseTransaction() {
+    }
 
 }
