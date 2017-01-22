@@ -25,6 +25,10 @@ public class AccountCtrl {
         return this.createAccountWithHouseHold(snsId, tempHouseHoldId.toString());
     }
 
+    public void updateAccount(Account account) {
+        accountRepo.save(account);
+    }
+
     public Account createAccountWithHouseHold(String snsId, String houseHoldId) {
         Account existing = this.findAccountBySnsId(snsId);
         if (existing != null) {

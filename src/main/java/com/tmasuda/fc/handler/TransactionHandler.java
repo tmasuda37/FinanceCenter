@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/transaction")
@@ -52,6 +53,26 @@ public class TransactionHandler {
         transactionCtrl.createOrSaveTransaction(aTransaction);
 
         return accountBalanceCtrl.getBalance(aTransaction);
+    }
+
+    @RequestMapping(value = "/duplicateCheck", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Transaction> duplicateCheck(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid List<Transaction> transactionList) throws Exception {
+        List<Transaction> uniqueList = new ArrayList<>();
+
+        for (Transaction aTransaction : transactionList) {
+            aTransaction.account = accountCtrl.findAccountBySnsId(snsId);
+
+            if (aTransaction.account == null) {
+                throw new Exception("Account Error!");
+            }
+
+            if (!transactionCtrl.hasSameTransaction(aTransaction)) {
+                uniqueList.add(aTransaction);
+            }
+        }
+
+        return uniqueList;
     }
 
     @RequestMapping(value = "/createAll", method = RequestMethod.POST)

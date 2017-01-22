@@ -2,17 +2,21 @@ package com.tmasuda.fc.handler;
 
 import com.tmasuda.fc.ctrl.AccountCtrl;
 import com.tmasuda.fc.ctrl.CategoryCtrl;
+import com.tmasuda.fc.ctrl.HouseHoldCtrl;
 import com.tmasuda.fc.model.Account;
+import com.tmasuda.fc.model.HouseHold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequestMapping("/account")
 @Controller
 public class AccountHandler {
+
+    @Autowired
+    private HouseHoldCtrl houseHoldCtrl;
 
     @Autowired
     private AccountCtrl accountCtrl;
@@ -30,6 +34,34 @@ public class AccountHandler {
         }
 
         return newAccount;
+    }
+
+    @RequestMapping(value = "/retrieve", method = RequestMethod.GET)
+    @ResponseBody
+    public HouseHold retrieveHouseHold(@RequestAttribute(value = "SNS_ID") String snsId) throws Exception {
+        Account account = accountCtrl.createAccount(snsId);
+
+        if (account == null) {
+            throw new Exception("Account Error!");
+        }
+
+        return account.houseHold;
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public HouseHold updateHouseHold(@RequestAttribute(value = "SNS_ID") String snsId, @Valid @RequestBody HouseHold houseHold) throws Exception {
+        Account account = accountCtrl.createAccount(snsId);
+
+        if (account == null) {
+            throw new Exception("Account Error!");
+        }
+
+        account.houseHold = houseHoldCtrl.createHouseHold(houseHold.houseHoldId);
+
+        accountCtrl.updateAccount(account);
+
+        return account.houseHold;
     }
 
 }
