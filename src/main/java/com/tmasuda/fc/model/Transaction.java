@@ -43,6 +43,9 @@ public class Transaction {
     @Column
     public String description;
 
+    @Transient
+    public boolean toExpense;
+
     @Override
     public String toString() {
         return "Transaction{" +
