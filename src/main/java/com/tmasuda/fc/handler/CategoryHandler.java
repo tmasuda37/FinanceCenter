@@ -22,11 +22,11 @@ public class CategoryHandler {
     @Autowired
     private CategoryCtrl categoryCtrl;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public List<Category> getList(@RequestAttribute(value = "SNS_ID") String snsId) {
+    public List<Category> list(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody Category category) {
         Account anAccount = accountCtrl.createAccount(snsId);
-        return categoryCtrl.findCategoriesByHouseHold(anAccount.houseHold);
+        return categoryCtrl.findCategoriesByHouseHoldAndCategoryApplyTo(anAccount.houseHold, category.categoryApplyTo);
     }
 
     @RequestMapping(value = "/apply-to-list", method = RequestMethod.GET)
@@ -46,7 +46,7 @@ public class CategoryHandler {
 
         categoryCtrl.createCategory(anAccount.houseHold, aCategory.categoryApplyTo, aCategory.name, aCategory.toExpense);
 
-        return categoryCtrl.findCategoriesByHouseHold(anAccount.houseHold);
+        return categoryCtrl.findCategoriesByHouseHoldAndCategoryApplyTo(anAccount.houseHold, aCategory.categoryApplyTo);
     }
 
 }

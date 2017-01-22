@@ -27,13 +27,7 @@ public class AccountHandler {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public Account create(@RequestAttribute(value = "SNS_ID") String snsId) throws Exception {
-        Account newAccount = accountCtrl.createAccount(snsId);
-
-        if (categoryCtrl.findCategoriesByHouseHold(newAccount.houseHold).size() == 0) {
-            categoryCtrl.createDefaultCategories(newAccount.houseHold);
-        }
-
-        return newAccount;
+        return accountCtrl.createAccount(snsId);
     }
 
     @RequestMapping(value = "/retrieve", method = RequestMethod.GET)

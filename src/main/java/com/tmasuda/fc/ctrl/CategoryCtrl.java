@@ -20,13 +20,8 @@ public class CategoryCtrl {
         return categoryRepo.findOneByPublicIdAndHouseHold(publicId, houseHold);
     }
 
-    public List<Category> findCategoriesByHouseHold(HouseHold houseHold) {
-        return categoryRepo.findAllByHouseHold(houseHold);
-    }
-
-    public void createDefaultCategories(HouseHold houseHold) {
-        categoryRepo.save(createWalletExpenseCategoryBuilder(houseHold, "Food").build());
-        categoryRepo.save(createBankIncomeCategoryBuilder(houseHold, "Salary").build());
+    public List<Category> findCategoriesByHouseHoldAndCategoryApplyTo(HouseHold houseHold, CategoryApplyTo categoryApplyTo) {
+        return categoryRepo.findAllByHouseHoldAndCategoryApplyTo(houseHold, categoryApplyTo);
     }
 
     public Category createCategory(HouseHold houseHold, CategoryApplyTo categoryApplyTo, String name, boolean toExpense) {
