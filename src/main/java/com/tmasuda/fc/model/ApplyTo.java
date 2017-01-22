@@ -1,5 +1,5 @@
 package com.tmasuda.fc.model;
 
-public enum CategoryApplyTo {
+public enum ApplyTo {
     Wallet, Bank
 }

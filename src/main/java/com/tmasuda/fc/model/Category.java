@@ -15,11 +15,6 @@ public class Category {
     public HouseHold houseHold;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "CategoryApplyTo cannot be null or empty.")
-    public CategoryApplyTo categoryApplyTo;
-
-    @Column
     @NotNull(message = "Name cannot be null or empty.")
     public String name;
 
@@ -37,7 +32,6 @@ public class Category {
 
     public Category(CategoryBuilder categoryBuilder) {
         this.houseHold = categoryBuilder.houseHold;
-        this.categoryApplyTo = categoryBuilder.categoryApplyTo;
         this.name = categoryBuilder.name;
         this.toExpense = categoryBuilder.toExpense;
         this.toTaxReturn = categoryBuilder.toTaxReturn;
@@ -46,15 +40,13 @@ public class Category {
 
     public static class CategoryBuilder {
         private final HouseHold houseHold;
-        private final CategoryApplyTo categoryApplyTo;
         private final String name;
         private boolean toExpense;
         private boolean toTaxReturn;
         private boolean toReimburse;
 
-        public CategoryBuilder(HouseHold houseHold, CategoryApplyTo categoryApplyTo, String name, boolean toExpense) {
+        public CategoryBuilder(HouseHold houseHold, String name, boolean toExpense) {
             this.houseHold = houseHold;
-            this.categoryApplyTo = categoryApplyTo;
             this.name = name;
             this.toExpense = toExpense;
         }

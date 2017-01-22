@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Currency;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"account_public_id", "currency", "categoryApplyTo"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"account_public_id", "currency", "applyTo"}))
 public class AccountBalance {
 
     @Id
@@ -21,7 +21,7 @@ public class AccountBalance {
 
     @Column
     @Enumerated(EnumType.STRING)
-    public CategoryApplyTo categoryApplyTo;
+    public ApplyTo applyTo;
 
     @Column
     public BigDecimal amount = BigDecimal.ZERO;
@@ -30,10 +30,10 @@ public class AccountBalance {
         super();
     }
 
-    public AccountBalance(Account account, Currency currency, CategoryApplyTo categoryApplyTo) {
+    public AccountBalance(Account account, Currency currency, ApplyTo applyTo) {
         this.account = account;
         this.currency = currency;
-        this.categoryApplyTo = categoryApplyTo;
+        this.applyTo = applyTo;
     }
 
 }
