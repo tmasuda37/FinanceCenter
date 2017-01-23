@@ -71,7 +71,7 @@ public class SummaryHandler {
         List<MonthlyCategoryBalance> monthlyCategoryBalanceList = new ArrayList<>();
         aHouseHold.accounts.forEach(account -> {
             monthlyCategoryBalanceList.addAll(monthlyCategoryBalanceCtrl.getMonthlyBalance(
-                    anAccount,
+                    account,
                     balanceFilter.currency,
                     balanceFilter.calendar));
         });
