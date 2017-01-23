@@ -3,14 +3,12 @@ package com.tmasuda.fc.handler;
 import com.tmasuda.fc.ctrl.AccountBalanceCtrl;
 import com.tmasuda.fc.ctrl.AccountCtrl;
 import com.tmasuda.fc.ctrl.MonthlyCategoryBalanceCtrl;
-import com.tmasuda.fc.model.Account;
-import com.tmasuda.fc.model.AccountBalance;
-import com.tmasuda.fc.model.BalanceFilter;
-import com.tmasuda.fc.model.MonthlyCategoryBalance;
+import com.tmasuda.fc.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/summary")
@@ -40,9 +38,9 @@ public class SummaryHandler {
         return accountBalanceCtrl.getBalance(anAccount, balanceFilter.currency);
     }
 
-    @RequestMapping(value = "/monthly-house-hold-balance", method = RequestMethod.POST)
+    @RequestMapping(value = "/monthly-account-balance", method = RequestMethod.POST)
     @ResponseBody
-    public List<MonthlyCategoryBalance> getMonthlyHouseHoldCategoryBalance(
+    public List<MonthlyCategoryBalance> getMonthlyAccountCategoryBalance(
             @RequestAttribute(value = "SNS_ID") String snsId,
             @RequestBody BalanceFilter balanceFilter) throws Exception {
         Account anAccount = accountCtrl.findAccountBySnsId(snsId);
@@ -55,6 +53,30 @@ public class SummaryHandler {
                 anAccount,
                 balanceFilter.currency,
                 balanceFilter.calendar);
+    }
+
+    @RequestMapping(value = "/monthly-house-hold-balance", method = RequestMethod.POST)
+    @ResponseBody
+    public List<MonthlyCategoryBalance> getMonthlyHouseHoldCategoryBalance(
+            @RequestAttribute(value = "SNS_ID") String snsId,
+            @RequestBody BalanceFilter balanceFilter) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        HouseHold aHouseHold = anAccount.houseHold;
+
+        List<MonthlyCategoryBalance> monthlyCategoryBalanceList = new ArrayList<>();
+        aHouseHold.accounts.forEach(account -> {
+            monthlyCategoryBalanceList.addAll(monthlyCategoryBalanceCtrl.getMonthlyBalance(
+                    account,
+                    balanceFilter.currency,
+                    balanceFilter.calendar));
+        });
+
+        return monthlyCategoryBalanceList;
     }
 
 }
