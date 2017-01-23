@@ -102,9 +102,9 @@ public class TransactionHandler {
         }
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/list-for-account", method = RequestMethod.POST)
     @ResponseBody
-    public List<Transaction> list(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter transactionFilter) throws Exception {
+    public List<Transaction> listForAccount(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter transactionFilter) throws Exception {
         Account anAccount = accountCtrl.findAccountBySnsId(snsId);
 
         if (anAccount == null) {
@@ -112,6 +112,25 @@ public class TransactionHandler {
         }
 
         return transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
+    }
+
+    @RequestMapping(value = "/list-for-house-hold", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Transaction> listForHouseHold(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter transactionFilter) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        HouseHold aHouseHold = anAccount.houseHold;
+
+        List<Transaction> transactionList = new ArrayList<>();
+        aHouseHold.accounts.forEach(account -> {
+            transactionList.addAll(transactionCtrl.list(account, transactionFilter.calendar, transactionFilter.currency));
+        });
+
+        return transactionList;
     }
 
     @RequestMapping(value = "/retrieve", method = RequestMethod.POST)
