@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 @RequestMapping("/summary")
@@ -57,7 +58,7 @@ public class SummaryHandler {
 
     @RequestMapping(value = "/monthly-house-hold-balance", method = RequestMethod.POST)
     @ResponseBody
-    public List<MonthlyCategoryBalance> getMonthlyHouseHoldCategoryBalance(
+    public Collection<MonthlyCategoryBalance> getMonthlyHouseHoldCategoryBalance(
             @RequestAttribute(value = "SNS_ID") String snsId,
             @RequestBody BalanceFilter balanceFilter) throws Exception {
         Account anAccount = accountCtrl.findAccountBySnsId(snsId);
@@ -68,15 +69,21 @@ public class SummaryHandler {
 
         HouseHold aHouseHold = anAccount.houseHold;
 
-        List<MonthlyCategoryBalance> monthlyCategoryBalanceList = new ArrayList<>();
+        HashMap<String, MonthlyCategoryBalance> monthlyCategoryBalanceList = new HashMap<>();
         aHouseHold.accounts.forEach(account -> {
-            monthlyCategoryBalanceList.addAll(monthlyCategoryBalanceCtrl.getMonthlyBalance(
-                    account,
-                    balanceFilter.currency,
-                    balanceFilter.calendar));
+            List<MonthlyCategoryBalance> newList = monthlyCategoryBalanceCtrl.getMonthlyBalance(account, balanceFilter.currency, balanceFilter.calendar);
+            newList.forEach(item -> {
+                if (monthlyCategoryBalanceList.containsKey(item.category.publicId)) {
+                    MonthlyCategoryBalance exItem = monthlyCategoryBalanceList.get(item.category.name);
+                    item.amount = item.amount.add(exItem.amount);
+                    monthlyCategoryBalanceList.put(item.category.name, item);
+                } else {
+                    monthlyCategoryBalanceList.put(item.category.name, item);
+                }
+            });
         });
 
-        return monthlyCategoryBalanceList;
+        return monthlyCategoryBalanceList.values();
     }
 
 }
