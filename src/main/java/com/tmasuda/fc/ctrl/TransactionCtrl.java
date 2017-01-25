@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.List;
@@ -28,17 +27,18 @@ public class TransactionCtrl {
 
     @Transactional
     public void createOrSaveTransaction(Transaction transaction) {
-        BigDecimal existingAmount = null;
+        Transaction existing = null;
 
         if (transaction.publicId != null) {
-            existingAmount = transactionRepo.findOne(transaction.publicId).amount;
+            existing = transactionRepo.findOne(transaction.publicId);
+        }
+
+        if (existing != null) {
+            existing.amount = existing.amount.negate();
+            accountBalanceCtrl.updateBalance(existing);
         }
 
         transactionRepo.save(transaction);
-
-        if (existingAmount != null) {
-            transaction.amount = transaction.amount.subtract(existingAmount);
-        }
 
         accountBalanceCtrl.updateBalance(transaction);
     }
