@@ -2,6 +2,7 @@ package com.tmasuda.fc.ctrl;
 
 import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.AccountBalance;
+import com.tmasuda.fc.model.ApplyTo;
 import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.repo.AccountBalanceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,12 @@ public class AccountBalanceCtrl {
 
     @Transactional
     public void updateBalance(Transaction savedTransaction) {
-        AccountBalance updatingAccountBalance = getBalance(savedTransaction);
-        updatingAccountBalance.amount = calcBalance(updatingAccountBalance, savedTransaction);
-        accountBalanceRepo.save(updatingAccountBalance);
+        // It doesn't care for the balance for Bank
+        if (savedTransaction.applyTo.equals(ApplyTo.Wallet)) {
+            AccountBalance updatingAccountBalance = getBalance(savedTransaction);
+            updatingAccountBalance.amount = calcBalance(updatingAccountBalance, savedTransaction);
+            accountBalanceRepo.save(updatingAccountBalance);
+        }
 
         categoryBalanceCtrl.updateBalance(savedTransaction);
     }

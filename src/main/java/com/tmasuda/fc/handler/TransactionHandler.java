@@ -111,7 +111,11 @@ public class TransactionHandler {
             throw new Exception("Account Error!");
         }
 
-        return transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
+        List<Transaction> tmpTxList = transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
+        tmpTxList.forEach(tx -> {
+            tx.isMine = (anAccount.publicId == tx.account.publicId);
+        });
+        return tmpTxList;
     }
 
     @RequestMapping(value = "/list-for-house-hold", method = RequestMethod.POST)
@@ -127,7 +131,11 @@ public class TransactionHandler {
 
         List<Transaction> transactionList = new ArrayList<>();
         aHouseHold.accounts.forEach(account -> {
-            transactionList.addAll(transactionCtrl.list(account, transactionFilter.calendar, transactionFilter.currency));
+            List<Transaction> tmpTxList = transactionCtrl.list(account, transactionFilter.calendar, transactionFilter.currency);
+            tmpTxList.forEach(tx -> {
+                tx.isMine = (account.publicId == tx.account.publicId);
+            });
+            transactionList.addAll(tmpTxList);
         });
 
         return transactionList;
