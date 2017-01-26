@@ -51,6 +51,9 @@ public class Transaction {
     @Transient
     public boolean toExpense;
 
+    @Transient
+    public boolean isMine;
+
     @Override
     public String toString() {
         return "Transaction{" +
