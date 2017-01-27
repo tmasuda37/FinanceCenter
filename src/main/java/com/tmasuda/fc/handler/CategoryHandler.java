@@ -35,14 +35,16 @@ public class CategoryHandler {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public List<Category> create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Category aCategory) throws Exception {
+    public List<Category> create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Category category) throws Exception {
         Account anAccount = accountCtrl.createAccount(snsId);
 
         if (anAccount == null) {
             throw new Exception("Account Error!");
         }
 
-        categoryCtrl.createCategory(anAccount.houseHold, aCategory.name, aCategory.toExpense);
+        category.houseHold = anAccount.houseHold;
+
+        categoryCtrl.createOrSaveCategory(category);
 
         return categoryCtrl.findCategoriesByHouseHold(anAccount.houseHold);
     }
