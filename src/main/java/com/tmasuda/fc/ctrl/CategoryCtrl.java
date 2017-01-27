@@ -23,8 +23,8 @@ public class CategoryCtrl {
         return categoryRepo.findAllByHouseHold(houseHold);
     }
 
-    public Category createCategory(HouseHold houseHold, String name, boolean toExpense) {
-        return categoryRepo.save(this.createCategoryBuilder(houseHold, name, toExpense).build());
+    public Category createOrSaveCategory(Category category) {
+        return categoryRepo.save(category);
     }
 
     private CategoryBuilder createCategoryBuilder(HouseHold houseHold, String name, boolean toExpense) {

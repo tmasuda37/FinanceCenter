@@ -19,8 +19,8 @@ public class EventCtrl {
         return eventRepo.findAllByHouseHold(houseHold);
     }
 
-    public Event createEvent(HouseHold houseHold, String name) {
-        return eventRepo.save(this.createEventBuilder(houseHold, name).build());
+    public Event createOrSaveEvent(Event event) {
+        return eventRepo.save(event);
     }
 
     private EventBuilder createEventBuilder(HouseHold houseHold, String name) {

@@ -30,14 +30,16 @@ public class EventHandler {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public List<Event> create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Event anEvent) throws Exception {
+    public List<Event> create(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid Event event) throws Exception {
         Account anAccount = accountCtrl.createAccount(snsId);
 
         if (anAccount == null) {
             throw new Exception("Account Error!");
         }
 
-        eventCtrl.createEvent(anAccount.houseHold, anEvent.name);
+        event.houseHold = anAccount.houseHold;
+
+        eventCtrl.createOrSaveEvent(event);
 
         return eventCtrl.findEventsByHouseHold(anAccount.houseHold);
     }

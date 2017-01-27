@@ -37,7 +37,9 @@ public class PlaceHandler {
             throw new Exception("Account Error!");
         }
 
-        placeCtrl.createPlace(anAccount.houseHold, anPlace.name);
+        anPlace.houseHold = anAccount.houseHold;
+
+        placeCtrl.createOrSavePlace(anPlace);
 
         return placeCtrl.findPlacesByHouseHold(anAccount.houseHold);
     }

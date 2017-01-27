@@ -19,8 +19,8 @@ public class PlaceCtrl {
         return placeRepo.findAllByHouseHold(houseHold);
     }
 
-    public Place createPlace(HouseHold houseHold, String name) {
-        return placeRepo.save(this.createPlaceBuilder(houseHold, name).build());
+    public Place createOrSavePlace(Place place) {
+        return placeRepo.save(place);
     }
 
     private PlaceBuilder createPlaceBuilder(HouseHold houseHold, String name) {
