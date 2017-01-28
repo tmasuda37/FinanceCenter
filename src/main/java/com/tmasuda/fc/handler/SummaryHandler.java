@@ -4,6 +4,7 @@ import com.tmasuda.fc.ctrl.AccountBalanceCtrl;
 import com.tmasuda.fc.ctrl.AccountCtrl;
 import com.tmasuda.fc.ctrl.MonthlyCategoryBalanceCtrl;
 import com.tmasuda.fc.model.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import java.util.List;
 @RequestMapping("/summary")
 @Controller
 public class SummaryHandler {
+
+    private static final Logger _logger = Logger.getLogger(SummaryHandler.class);
 
     @Autowired
     private AccountCtrl accountCtrl;
@@ -72,8 +75,9 @@ public class SummaryHandler {
         HashMap<String, MonthlyCategoryBalance> monthlyCategoryBalanceList = new HashMap<>();
         aHouseHold.accounts.forEach(account -> {
             List<MonthlyCategoryBalance> newList = monthlyCategoryBalanceCtrl.getMonthlyBalance(account, balanceFilter.currency, balanceFilter.calendar);
+            _logger.info("SummaryHandler#getMonthlyHouseHoldCategoryBalance - newList is: " + newList.size());
             newList.forEach(item -> {
-                if (monthlyCategoryBalanceList.containsKey(item.category.publicId)) {
+                if (monthlyCategoryBalanceList.containsKey(item.category.name)) {
                     MonthlyCategoryBalance exItem = monthlyCategoryBalanceList.get(item.category.name);
                     item.amount = item.amount.add(exItem.amount);
                     monthlyCategoryBalanceList.put(item.category.name, item);
