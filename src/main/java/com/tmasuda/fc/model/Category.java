@@ -30,6 +30,9 @@ public class Category {
     @Column
     public boolean toReimburse;
 
+    @Column
+    public boolean toIgnoreCategoryBalance;
+
     public Category() {
     }
 
