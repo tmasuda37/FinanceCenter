@@ -30,8 +30,8 @@ public class Category {
     @Column
     public boolean toReimburse;
 
-    @Column(nullable = true)
-    public boolean toIgnoreCategoryBalance = false;
+    @Column
+    public Boolean toIgnoreCategoryBalance;
 
     public Category() {
     }
