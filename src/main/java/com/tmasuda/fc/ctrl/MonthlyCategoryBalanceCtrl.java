@@ -42,11 +42,15 @@ public class MonthlyCategoryBalanceCtrl {
         for (MonthlyCategoryBalance monthlyCategoryBalance : monthlyCategoryBalanceList) {
             if (isBudgetTracking) {
                 if (monthlyCategoryBalance.category.toExpense && monthlyCategoryBalance.category.isBudgetTracking) {
-                    budgetTotal = budgetTotal.add(monthlyCategoryBalance.budget);
+                    if (monthlyCategoryBalance.budget != null) {
+                        budgetTotal = budgetTotal.add(monthlyCategoryBalance.budget);
+                    }
                 }
             } else {
                 if (monthlyCategoryBalance.category.toExpense) {
-                    budgetTotal = budgetTotal.add(monthlyCategoryBalance.budget);
+                    if (monthlyCategoryBalance.budget != null) {
+                        budgetTotal = budgetTotal.add(monthlyCategoryBalance.budget);
+                    }
                 }
             }
         }
