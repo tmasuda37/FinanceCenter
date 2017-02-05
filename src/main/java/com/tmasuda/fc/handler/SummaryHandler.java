@@ -1,14 +1,14 @@
 package com.tmasuda.fc.handler;
 
-import com.tmasuda.fc.ctrl.AccountBalanceCtrl;
-import com.tmasuda.fc.ctrl.AccountCtrl;
-import com.tmasuda.fc.ctrl.MonthlyCategoryBalanceCtrl;
+import com.tmasuda.fc.ctrl.*;
 import com.tmasuda.fc.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +24,12 @@ public class SummaryHandler {
 
     @Autowired
     private AccountBalanceCtrl accountBalanceCtrl;
+
+    @Autowired
+    private CurrencyCtrl currencyCtrl;
+
+    @Autowired
+    private CategoryCtrl categoryCtrl;
 
     @Autowired
     private MonthlyCategoryBalanceCtrl monthlyCategoryBalanceCtrl;
@@ -88,6 +94,78 @@ public class SummaryHandler {
         });
 
         return monthlyCategoryBalanceList.values();
+    }
+
+    @RequestMapping(value = "/set-budget", method = RequestMethod.POST)
+    @ResponseBody
+    public void setBudget(
+            @RequestAttribute(value = "SNS_ID") String snsId,
+            @RequestBody Calendar calendar) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+
+        List<Category> trackingCategories = categoryCtrl.findAllByHouseHoldAndIsBudgetTracking(anAccount.houseHold);
+
+        trackingCategories.forEach(trackingCategory -> {
+            currencyCtrl.getList().forEach(currency -> {
+
+                if (!monthlyCategoryBalanceCtrl.hasMonthlyCategoryBalanceByUniqueKeys(
+                        anAccount,
+                        currency,
+                        trackingCategory,
+                        year,
+                        month)) {
+
+                    MonthlyCategoryBalance monthlyCategoryBalance = new MonthlyCategoryBalance(
+                            anAccount,
+                            currency,
+                            trackingCategory,
+                            year,
+                            month);
+
+                    monthlyCategoryBalanceCtrl.save(monthlyCategoryBalance);
+                }
+
+            });
+        });
+    }
+
+    @RequestMapping(value = "/update-budget", method = RequestMethod.POST)
+    @ResponseBody
+    public void updateBudget(
+            @RequestAttribute(value = "SNS_ID") String snsId,
+            @RequestBody List<MonthlyCategoryBalance> updatedBudgets) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        updatedBudgets.forEach(updateBudget -> {
+            MonthlyCategoryBalance monthlyCategoryBalance = monthlyCategoryBalanceCtrl.findOneByPublicId(updateBudget.publicId);
+            monthlyCategoryBalance.budget = updateBudget.budget;
+            monthlyCategoryBalanceCtrl.updateBudget(monthlyCategoryBalance);
+        });
+    }
+
+    @RequestMapping(value = "/get-budget-total", method = RequestMethod.POST)
+    @ResponseBody
+    public BigDecimal getBudgetTotal(
+            @RequestAttribute(value = "SNS_ID") String snsId,
+            @RequestBody MonthlyCategoryBalance requestBudget) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        return monthlyCategoryBalanceCtrl.getBudgetTotal(anAccount, requestBudget.currency, requestBudget.calendar, requestBudget.isBudgetTracking);
     }
 
 }

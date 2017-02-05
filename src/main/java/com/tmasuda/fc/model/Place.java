@@ -22,22 +22,4 @@ public class Place {
     public Place() {
     }
 
-    public Place(PlaceBuilder placeBuilder) {
-        this.houseHold = placeBuilder.houseHold;
-        this.name = placeBuilder.name;
-    }
-
-    public static class PlaceBuilder {
-        private final HouseHold houseHold;
-        private final String name;
-
-        public PlaceBuilder(HouseHold houseHold, String name) {
-            this.houseHold = houseHold;
-            this.name = name;
-        }
-
-        public Place build() {
-            return new Place(this);
-        }
-    }
 }

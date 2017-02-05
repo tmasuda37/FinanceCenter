@@ -1,7 +1,6 @@
 package com.tmasuda.fc.ctrl;
 
 import com.tmasuda.fc.model.Event;
-import com.tmasuda.fc.model.Event.EventBuilder;
 import com.tmasuda.fc.model.HouseHold;
 import com.tmasuda.fc.repo.EventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,6 @@ public class EventCtrl {
 
     public Event createOrSaveEvent(Event event) {
         return eventRepo.save(event);
-    }
-
-    private EventBuilder createEventBuilder(HouseHold houseHold, String name) {
-        return new EventBuilder(houseHold, name);
     }
 
 }

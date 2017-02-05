@@ -14,4 +14,6 @@ public interface MonthlyCategoryBalanceRepo extends JpaRepository<MonthlyCategor
 
     List<MonthlyCategoryBalance> findAllByAccountAndCurrencyAndYearAndMonth(Account account, Currency currency, int year, int month);
 
+    Long countByAccountAndCurrencyAndCategoryAndYearAndMonth(Account account, Currency currency, Category category, int year, int month);
+
 }

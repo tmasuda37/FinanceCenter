@@ -12,4 +12,6 @@ public interface CategoryRepo extends JpaRepository<Category, Long> {
 
     public List<Category> findAllByHouseHold(HouseHold houseHold);
 
+    public List<Category> findAllByHouseHoldAndIsBudgetTracking(HouseHold houseHold, Boolean isBudgetTracking);
+
 }

@@ -22,22 +22,4 @@ public class Event {
     public Event() {
     }
 
-    public Event(EventBuilder eventBuilder) {
-        this.houseHold = eventBuilder.houseHold;
-        this.name = eventBuilder.name;
-    }
-
-    public static class EventBuilder {
-        private final HouseHold houseHold;
-        private final String name;
-
-        public EventBuilder(HouseHold houseHold, String name) {
-            this.houseHold = houseHold;
-            this.name = name;
-        }
-
-        public Event build() {
-            return new Event(this);
-        }
-    }
 }

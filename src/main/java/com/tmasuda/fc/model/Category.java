@@ -22,55 +22,21 @@ public class Category {
     public String name;
 
     @Column
-    public boolean toExpense;
+    public Boolean toExpense;
 
     @Column
-    public boolean toTaxReturn;
+    public Boolean toTaxReturn;
 
     @Column
-    public boolean toReimburse;
+    public Boolean toReimburse;
 
     @Column
-    public Boolean toIgnoreCategoryBalance;
+    public Boolean toIgnoreCategoryBalance = false;
+
+    @Column
+    public Boolean isBudgetTracking = false;
 
     public Category() {
-    }
-
-    public Category(CategoryBuilder categoryBuilder) {
-        this.houseHold = categoryBuilder.houseHold;
-        this.name = categoryBuilder.name;
-        this.toExpense = categoryBuilder.toExpense;
-        this.toTaxReturn = categoryBuilder.toTaxReturn;
-        this.toReimburse = categoryBuilder.toReimburse;
-    }
-
-    public static class CategoryBuilder {
-        private final HouseHold houseHold;
-        private final String name;
-        private boolean toExpense;
-        private boolean toTaxReturn;
-        private boolean toReimburse;
-
-        public CategoryBuilder(HouseHold houseHold, String name, boolean toExpense) {
-            this.houseHold = houseHold;
-            this.name = name;
-            this.toExpense = toExpense;
-        }
-
-        public CategoryBuilder toTaxReturn(boolean toTaxReturn) {
-            this.toTaxReturn = toTaxReturn;
-            return this;
-        }
-
-        public CategoryBuilder toReimburse(boolean toReimburse) {
-            this.toReimburse = toReimburse;
-            return this;
-        }
-
-        public Category build() {
-            return new Category(this);
-        }
-
     }
 
 }
