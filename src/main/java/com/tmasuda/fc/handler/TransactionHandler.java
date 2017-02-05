@@ -133,7 +133,7 @@ public class TransactionHandler {
         aHouseHold.accounts.forEach(account -> {
             List<Transaction> tmpTxList = transactionCtrl.list(account, transactionFilter.calendar, transactionFilter.currency);
             tmpTxList.forEach(tx -> {
-                tx.isMine = (account.publicId == tx.account.publicId);
+                tx.isMine = (anAccount.publicId == tx.account.publicId);
             });
             transactionList.addAll(tmpTxList);
         });
