@@ -1,7 +1,6 @@
 package com.tmasuda.fc.ctrl;
 
 import com.tmasuda.fc.model.Category;
-import com.tmasuda.fc.model.Category.CategoryBuilder;
 import com.tmasuda.fc.model.HouseHold;
 import com.tmasuda.fc.repo.CategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,12 @@ public class CategoryCtrl {
         return categoryRepo.findAllByHouseHold(houseHold);
     }
 
-    public Category createOrSaveCategory(Category category) {
-        return categoryRepo.save(category);
+    public List<Category> findAllByHouseHoldAndIsBudgetTracking(HouseHold houseHold) {
+        return categoryRepo.findAllByHouseHoldAndIsBudgetTracking(houseHold, true);
     }
 
-    private CategoryBuilder createCategoryBuilder(HouseHold houseHold, String name, boolean toExpense) {
-        return new Category.CategoryBuilder(houseHold, name, toExpense);
+    public Category createOrSaveCategory(Category category) {
+        return categoryRepo.save(category);
     }
 
 }

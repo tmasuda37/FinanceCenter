@@ -2,6 +2,7 @@ package com.tmasuda.fc.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Currency;
 
 @Entity
@@ -30,6 +31,15 @@ public class MonthlyCategoryBalance {
 
     @Column
     public BigDecimal amount = BigDecimal.ZERO;
+
+    @Column
+    public BigDecimal budget = BigDecimal.ZERO;
+
+    @Transient
+    public Calendar calendar;
+
+    @Transient
+    public Boolean isBudgetTracking;
 
     public MonthlyCategoryBalance() {
         super();
