@@ -22,10 +22,6 @@ public class CategoryCtrl {
         return categoryRepo.findAllByHouseHold(houseHold);
     }
 
-    public List<Category> findAllByHouseHoldAndIsBudgetTracking(HouseHold houseHold) {
-        return categoryRepo.findAllByHouseHoldAndIsBudgetTracking(houseHold, true);
-    }
-
     public Category createOrSaveCategory(Category category) {
         return categoryRepo.save(category);
     }
