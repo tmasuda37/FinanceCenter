@@ -110,7 +110,7 @@ public class SummaryHandler {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
 
-        List<Category> trackingCategories = categoryCtrl.findAllByHouseHoldAndIsBudgetTracking(anAccount.houseHold);
+        List<Category> trackingCategories = categoryCtrl.findCategoriesByHouseHold(anAccount.houseHold);
 
         trackingCategories.forEach(trackingCategory -> {
             currencyCtrl.getList().forEach(currency -> {
