@@ -81,14 +81,18 @@ public class SummaryHandler {
         HashMap<Long, MonthlyCategoryBalance> monthlyCategoryBalanceList = new HashMap<>();
         aHouseHold.accounts.forEach(account -> {
             List<MonthlyCategoryBalance> newList = monthlyCategoryBalanceCtrl.getMonthlyBalance(account, balanceFilter.currency, balanceFilter.calendar);
-            _logger.info("SummaryHandler#getMonthlyHouseHoldCategoryBalance - newList is: " + newList.size());
             newList.forEach(item -> {
                 if (monthlyCategoryBalanceList.containsKey(item.category.publicId)) {
                     MonthlyCategoryBalance exItem = monthlyCategoryBalanceList.get(item.category.publicId);
+
                     _logger.info("exItem.amount = " + exItem.amount + ", " + "item.amount = " + item.amount);
+                    if (exItem.amount != null && item.amount != null)
+                        exItem.amount = item.amount.add(exItem.amount);
+
                     _logger.info("exItem.budget = " + exItem.budget + ", " + "item.budget = " + item.budget);
-                    exItem.amount = item.amount.add(exItem.amount);
-                    exItem.budget = item.budget.add(exItem.budget);
+                    if (exItem.budget != null && item.budget != null)
+                        exItem.budget = item.budget.add(exItem.budget);
+
                     monthlyCategoryBalanceList.put(item.category.publicId, exItem);
                 } else {
                     monthlyCategoryBalanceList.put(item.category.publicId, item);
