@@ -85,11 +85,8 @@ public class SummaryHandler {
             newList.forEach(item -> {
                 if (monthlyCategoryBalanceList.containsKey(item.category.publicId)) {
                     MonthlyCategoryBalance exItem = monthlyCategoryBalanceList.get(item.category.publicId);
-                    _logger.info("SummaryHandler#getMonthlyHouseHoldCategoryBalance - " +
-                            "item.amount.add(exItem.amount) = " + item.amount.add(exItem.amount) + ", " +
-                            "exItem.amount = " + exItem.amount + ", " +
-                            "item.amount = " + item.amount);
                     exItem.amount = item.amount.add(exItem.amount);
+                    exItem.budget = item.budget.add(exItem.budget);
                     monthlyCategoryBalanceList.put(item.category.publicId, exItem);
                 } else {
                     monthlyCategoryBalanceList.put(item.category.publicId, item);
