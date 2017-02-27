@@ -85,6 +85,8 @@ public class SummaryHandler {
             newList.forEach(item -> {
                 if (monthlyCategoryBalanceList.containsKey(item.category.publicId)) {
                     MonthlyCategoryBalance exItem = monthlyCategoryBalanceList.get(item.category.publicId);
+                    _logger.info("exItem.amount = " + exItem.amount + ", " + "item.amount = " + item.amount);
+                    _logger.info("exItem.budget = " + exItem.budget + ", " + "item.budget = " + item.budget);
                     exItem.amount = item.amount.add(exItem.amount);
                     exItem.budget = item.budget.add(exItem.budget);
                     monthlyCategoryBalanceList.put(item.category.publicId, exItem);
