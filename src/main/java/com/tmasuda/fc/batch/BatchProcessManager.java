@@ -26,7 +26,7 @@ public class BatchProcessManager {
     @Autowired
     private EventBalanceCtrl eventBalanceCtrl;
 
-    @Scheduled(cron = "0 0 0 */5 * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void updateEventBalance() {
         LOGGER.info("#updateEventBalance() - START");
 
