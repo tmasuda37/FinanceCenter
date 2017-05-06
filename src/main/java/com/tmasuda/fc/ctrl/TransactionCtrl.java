@@ -1,12 +1,14 @@
 package com.tmasuda.fc.ctrl;
 
 import com.tmasuda.fc.model.Account;
+import com.tmasuda.fc.model.Event;
 import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.repo.TransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.List;
@@ -76,6 +78,10 @@ public class TransactionCtrl {
         end.set(Calendar.SECOND, 0);
         end.set(Calendar.MILLISECOND, 0);
         return transactionRepo.findByCalendarGreaterThanAndCalendarLessThanAndAccountAndCurrency(start, end, account, currency);
+    }
+
+    public BigDecimal getTotalAmountByEvent(Event event, Currency currency) {
+        return transactionRepo.sumByEventAndCurrency(event, currency);
     }
 
 }
