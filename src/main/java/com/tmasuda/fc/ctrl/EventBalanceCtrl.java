@@ -28,7 +28,7 @@ public class EventBalanceCtrl {
 
         currencyList.forEach(currency -> {
             EventBalance eventBalance = getBalance(event, currency);
-            eventBalance.amount = transactionCtrl.getTotalAmountByEvent(event, currency);
+            eventBalance.amount = transactionCtrl.getTotalExpenseAmountByEvent(event, currency);
             eventBalanceRepo.save(eventBalance);
         });
     }
