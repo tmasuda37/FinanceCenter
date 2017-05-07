@@ -80,8 +80,8 @@ public class TransactionCtrl {
         return transactionRepo.findByCalendarGreaterThanAndCalendarLessThanAndAccountAndCurrency(start, end, account, currency);
     }
 
-    public BigDecimal getTotalAmountByEvent(Event event, Currency currency) {
-        return transactionRepo.sumByEventAndCurrency(event, currency);
+    public BigDecimal getTotalExpenseAmountByEvent(Event event, Currency currency) {
+        return transactionRepo.sumExpensesByEventAndCurrency(event, currency);
     }
 
 }

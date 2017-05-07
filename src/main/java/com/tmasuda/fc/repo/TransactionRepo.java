@@ -17,7 +17,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
 
     Long countByCalendarAndAmountAndDescription(Calendar calendar, BigDecimal amount, String description);
 
-    @Query(value = "select sum(tx.amount) from Transaction tx where tx.event_public_id = ?1 and tx.currency = ?2", nativeQuery = true)
-    BigDecimal sumByEventAndCurrency(Event event, Currency currency);
+    @Query(value = "select sum(tx.amount) from Transaction tx inner join Category ct on tx.category_public_id = ct.public_id where tx.event_public_id = ?1 and tx.currency = ?2 and ct.to_expense = true", nativeQuery = true)
+    BigDecimal sumExpensesByEventAndCurrency(Event event, Currency currency);
 
 }
