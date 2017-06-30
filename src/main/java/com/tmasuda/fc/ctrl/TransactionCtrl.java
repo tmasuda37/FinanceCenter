@@ -37,7 +37,15 @@ public class TransactionCtrl {
 
         if (existing != null) {
             existing.amount = existing.amount.negate();
+
+            // Account field is ignored in JSON.
+            transaction.account = existing.account;
+
             accountBalanceCtrl.updateBalance(existing);
+        }
+
+        if (transaction.event != null && transaction.event.publicId == null) {
+            transaction.event = null;
         }
 
         transactionRepo.save(transaction);

@@ -102,6 +102,20 @@ public class TransactionHandler {
         }
     }
 
+    @RequestMapping(value = "/saveAll", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveAll(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody @Valid List<Transaction> transactionList) throws Exception {
+        Account anAccount = accountCtrl.findAccountBySnsId(snsId);
+
+        if (anAccount == null) {
+            throw new Exception("Account Error!");
+        }
+
+        for (Transaction aTransaction : transactionList) {
+            transactionCtrl.createOrSaveTransaction(aTransaction);
+        }
+    }
+
     @RequestMapping(value = "/list-for-account", method = RequestMethod.POST)
     @ResponseBody
     public List<Transaction> listForAccount(@RequestAttribute(value = "SNS_ID") String snsId, @RequestBody TransactionFilter transactionFilter) throws Exception {
