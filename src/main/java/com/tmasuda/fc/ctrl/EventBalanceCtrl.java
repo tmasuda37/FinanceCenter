@@ -34,6 +34,8 @@ public class EventBalanceCtrl {
             BigDecimal amount = transactionCtrl.getTotalExpenseAmountByEvent(event, currency);
             if (amount != null) {
                 eventBalance.amount = amount;
+            } else {
+                eventBalance.amount = BigDecimal.ZERO;
             }
 
             eventBalanceRepo.save(eventBalance);
