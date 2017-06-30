@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -28,9 +30,18 @@ public class EventBalanceCtrl {
 
         currencyList.forEach(currency -> {
             EventBalance eventBalance = getBalance(event, currency);
-            eventBalance.amount = transactionCtrl.getTotalExpenseAmountByEvent(event, currency);
+
+            BigDecimal amount = transactionCtrl.getTotalExpenseAmountByEvent(event, currency);
+            if (amount != null) {
+                eventBalance.amount = amount;
+            }
+
             eventBalanceRepo.save(eventBalance);
         });
+    }
+
+    public List<EventBalance> findBalanceListByEvent(Event event) {
+        return eventBalanceRepo.findAllByEvent(event);
     }
 
     private EventBalance getBalance(Event event, Currency currency) {
