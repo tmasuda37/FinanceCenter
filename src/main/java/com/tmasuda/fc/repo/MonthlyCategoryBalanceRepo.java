@@ -2,6 +2,7 @@ package com.tmasuda.fc.repo;
 
 import com.tmasuda.fc.model.Account;
 import com.tmasuda.fc.model.Category;
+import com.tmasuda.fc.model.HouseHold;
 import com.tmasuda.fc.model.MonthlyCategoryBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +14,10 @@ public interface MonthlyCategoryBalanceRepo extends JpaRepository<MonthlyCategor
     MonthlyCategoryBalance findOneByAccountAndCurrencyAndCategoryAndYearAndMonth(Account account, Currency currency, Category category, int year, int month);
 
     List<MonthlyCategoryBalance> findAllByAccountAndCurrencyAndYearAndMonth(Account account, Currency currency, int year, int month);
+
+    MonthlyCategoryBalance findOneByHouseHoldAndCurrencyAndCategoryAndYearAndMonth(HouseHold houseHold, Currency currency, Category category, int year, int month);
+
+    List<MonthlyCategoryBalance> findAllByHouseHoldAndCurrencyAndYearAndMonth(HouseHold houseHold, Currency currency, int year, int month);
 
     Long countByAccountAndCurrencyAndCategoryAndYearAndMonth(Account account, Currency currency, Category category, int year, int month);
 

@@ -19,6 +19,9 @@ public class Event {
     @NotNull(message = "Name cannot be null or empty.")
     public String name;
 
+    @Column(columnDefinition = "boolean default false")
+    public Boolean retired;
+
     public Event() {
     }
 
