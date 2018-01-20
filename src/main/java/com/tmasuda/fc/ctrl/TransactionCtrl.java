@@ -1,6 +1,7 @@
 package com.tmasuda.fc.ctrl;
 
 import com.tmasuda.fc.model.Account;
+import com.tmasuda.fc.model.Category;
 import com.tmasuda.fc.model.Event;
 import com.tmasuda.fc.model.Transaction;
 import com.tmasuda.fc.repo.TransactionRepo;
@@ -67,7 +68,7 @@ public class TransactionCtrl {
         return transactionRepo.countByCalendarAndAmountAndDescription(newTransaction.calendar, newTransaction.amount, newTransaction.description).intValue() > 0;
     }
 
-    public List<Transaction> list(Account account, Calendar calendar, Currency currency) {
+    public List<Transaction> list(Account account, Calendar calendar, Currency currency, Category category) {
         Calendar start = Calendar.getInstance();
         start.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
         start.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
@@ -85,6 +86,11 @@ public class TransactionCtrl {
         end.set(Calendar.MINUTE, 0);
         end.set(Calendar.SECOND, 0);
         end.set(Calendar.MILLISECOND, 0);
+
+        if (category != null) {
+            return transactionRepo.findByCalendarGreaterThanAndCalendarLessThanAndAccountAndCurrencyAndCategory(start, end, account, currency, category);
+        }
+
         return transactionRepo.findByCalendarGreaterThanAndCalendarLessThanAndAccountAndCurrency(start, end, account, currency);
     }
 

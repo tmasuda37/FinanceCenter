@@ -125,7 +125,7 @@ public class TransactionHandler {
             throw new Exception("Account Error!");
         }
 
-        List<Transaction> tmpTxList = transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency);
+        List<Transaction> tmpTxList = transactionCtrl.list(anAccount, transactionFilter.calendar, transactionFilter.currency, transactionFilter.category);
         tmpTxList.forEach(tx -> {
             tx.isMine = (anAccount.publicId == tx.account.publicId);
         });
@@ -145,7 +145,7 @@ public class TransactionHandler {
 
         List<Transaction> transactionList = new ArrayList<>();
         aHouseHold.accounts.forEach(account -> {
-            List<Transaction> tmpTxList = transactionCtrl.list(account, transactionFilter.calendar, transactionFilter.currency);
+            List<Transaction> tmpTxList = transactionCtrl.list(account, transactionFilter.calendar, transactionFilter.currency, transactionFilter.category);
             tmpTxList.forEach(tx -> {
                 tx.isMine = (anAccount.publicId == tx.account.publicId);
             });
